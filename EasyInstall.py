@@ -122,6 +122,7 @@ def flash_esp32marauder():
 	return
 
 def save_flipperbmsettings():
+	global serialport
 	if serialport=="/dev/cu.usbmodem01":
 		serialport="/dev/cu.usbmodemblackmagic1"
 	print("Saving Flipper Blackmagic WiFi Settings to Extra_ESP32_Bins/Blackmagic/nvs.bin")

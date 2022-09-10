@@ -25,5 +25,5 @@ Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz
 * [UberGuidoZ](https://github.com/UberGuidoZ) Tweaking/Automating Frog's original, continued scripting, development, and testing.
 
 
-* L0rd_K0nda from the Unleashed Flipper Zero Discord for testing this script for me
+* [L0rd_K0nda](https://github.com/L0rdK0nda) from the Unleashed Flipper Zero Discord for testing this script for me
 * [SkeletonMan](https://github.com/SkeletonMan03) Creating this Python flasher in order to try to make a multi-os flasher since the Batch script obviously could not run on Linux or Mac OS X
