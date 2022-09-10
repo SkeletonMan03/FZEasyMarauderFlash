@@ -8,6 +8,8 @@ This is for easily flashing Marauder on an ESP32 or WiFi Devboard for a Flipper 
 3) run `python3 EasyInstall.py`. 
 4) Select the option of what you want to do
 
+* Important note: You may need to run this script with `sudo`
+
 ## This project is based on the Windows Marauder flasher batch script
 
 You can find it [here in UberGuidoZ's repo](https://github.com/UberGuidoZ/Flipper/blob/main/Wifi_DevBoard/FZ_Marauder_Flasher)
