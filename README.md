@@ -3,10 +3,12 @@ This is for easily flashing Marauder on an ESP32 or WiFi Devboard for a Flipper 
 ![Screenshot of EasyInstall](https://raw.githubusercontent.com/SkeletonMan03/FZEasyMarauderFlash/main/EasyInstall_Screenshot.png)
 ## It is now simple to install or update Marauder on Linux, Mac OS X, or Windows.
 
-1) Hold `BOOT` on the devboard and plug it into your device via USB. 
-2) run `pip3 install -r requirements.txt`. 
-3) run `python3 EasyInstall.py`. 
-4) Select the option of what you want to do
+1) Connect the devboard via USB.
+2) Press and hold the `BOOT` button on the module, press and release the `RESET` button.
+3) Release the BOOT button.
+4) run `pip3 install -r requirements.txt`. 
+5) run `python3 EasyInstall.py`. 
+6) Select the option of what you want to do
 
 * Important note: You may need to run this script with `sudo`
 
@@ -17,6 +19,7 @@ You can find it [here in UberGuidoZ's repo](https://github.com/UberGuidoZ/Flippe
 ## Improvements over the batch script
 This script pulls all of its resources from the proper Github repositories in order to make sure you are up-to-date. 
 The only dependencies it does not get by itself are the required Python modules
+
 
 ## Acknoledgements:
 Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz as this wouldn't exist without the original project
