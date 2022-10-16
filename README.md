@@ -19,7 +19,7 @@ You can find it [here in UberGuidoZ's repo](https://github.com/UberGuidoZ/Flippe
 ## Improvements over the batch script
 This script pulls all of its resources from the proper Github repositories in order to make sure you are up-to-date. 
 The only dependencies it does not get by itself are the required Python modules
-
+This script is now capable of flashing Marauder onto an ESP32-WROOM!
 
 ## Acknoledgements:
 Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz as this wouldn't exist without the original project
