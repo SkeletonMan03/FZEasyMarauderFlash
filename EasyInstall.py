@@ -191,6 +191,8 @@ def update_option():
 		shutil.rmtree("Extra_ESP32_Bins")
 	if os.path.exists("esptool"):
 		shutil.rmtree("esptool")
+	if os.path.exists("ScorpBins"):
+		shutil.rmtree("ScorpBins")
 	prereqcheck()
 	return
 
