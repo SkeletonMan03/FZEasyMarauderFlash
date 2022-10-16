@@ -31,3 +31,5 @@ Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz
 * [L0rd_K0nda](https://github.com/L0rdK0nda) from the Unleashed Flipper Zero Discord for testing this script for me
 * [SkeletonMan](https://github.com/SkeletonMan03) Creating this Python flasher in order to try to make a multi-os flasher since the Batch script obviously could not run on Linux or Mac OS X
 * [CorbanR](https://github.com/CorbanR) Forking and fixing instructions and adding a requirement needed for Mac OS X
+* [dchalm](https://github.com/dchalm) Forking and fixing mistakes I should have noticed. Thank you!
+* [Scorp] Compiling needed bins to be able to flash to ESP32-Wroom
