@@ -15,6 +15,8 @@ OPENASCII='''
 #					#
 #	Special thanks to L0rd_K0nda	#
 #	for doing testing for me!	#
+#	Thanks to Scorp for compiling	#
+#	Needed bins for the ESP32-WROOM	#
 #########################################
 '''
 print(OPENASCII)
@@ -76,6 +78,7 @@ def choose_fw():
 || 3) Flash Flipper Blackmagic			||
 || 4) Flash Marauder on ESP32-WROOM		||
 || 5) Update all files				||
+|| 6) Exit					||
 \\\==============================================//
 '''
 	global chip
@@ -100,6 +103,10 @@ def choose_fw():
 	elif fwchoice==5:
 		print("You have chosen to update all of the files")
 		update_option()
+	elif fwchoice==6:
+		print("You have chosen to exit")
+		print("Exiting!")
+		exit()
 	else:
 		print("Invalid option!")
 	return
