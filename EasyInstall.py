@@ -24,20 +24,29 @@ print(OPENASCII)
 print("Make sure your ESP32 is plugged in!")
 BR=str("115200")
 
-global runningOS
-global serialport
-runningOS=platform.system()
-if runningOS=="Linux":
-	serialport="/dev/ttyACM0"
-elif runningOS=="Darwin":
-	serialport="/dev/cu.usbmodem01"
-elif runningOS=="Windows":
+def checkfordevboardserialport():
+	global serialport
 	vid="303A"
 	com_port=None
 	ports=list(serial.tools.list_ports.comports())
 	for port in ports:
 		if vid in port.hwid:
 			serialport=port.device
+		else:
+			print("WiFi Devboard not plugged in!")
+	return
+
+def checkforesp32serialport():
+	global serialport
+	vid="10C4"
+	com_port=None
+	ports=list(serial.tools.list_ports.comports())
+	for port in ports:
+		if vid in port.hwid:
+			serialport=port.device
+		else:
+			print("ESP32 not plugged in!")
+	return
 
 def checkforesptool():
 	esptoolrepo="https://github.com/espressif/esptool.git"
@@ -89,20 +98,24 @@ def choose_fw():
 	print(choices)
 	fwchoice=int(input("Please enter the number of your choice: "))
 	if fwchoice==1:
-		print("You have chosen to flash Marauder!")
+		print("You have chosen to flash Marauder on a WiFi devboard!")
 		chip="esp32s2"
+		checkfordevboardserialport()
 		flash_esp32marauder()
 	elif fwchoice==2:
 		print("You have chosen to save Flipper Blackmagic WiFi settings")
 		chip="esp32s2"
+		checkfordevboardserialport()
 		save_flipperbmsettings()
 	elif fwchoice==3:
 		print("You have chosen to flash Flipper Blackmagic")
 		chip="esp32s2"
+		checkfordevboardserialport()
 		flash_flipperbm()
 	elif fwchoice==4:
 		print("You have chosen to flash Marauder onto an ESP32-WROOM")
 		chip="esp32"
+		checkforesp32serialport()
 		flash_esp32wroom()
 	elif fwchoice==5:
 		print("You have chosen to update all of the files")
@@ -116,6 +129,7 @@ def choose_fw():
 	return
 
 def erase_esp32fw():
+	global serialport
 	print("Erasing firmware...")
 	os.system("python3 "+esptoolfile+ " -p "+ serialport+ " -b "+ BR+ " -c "+chip+" --before default_reset -a no_reset erase_region 0x9000 0x6000")
 	print("Firmware erased!")
@@ -138,6 +152,7 @@ def checkforesp32marauder():
 		else:
 			print("Somehow, the ESP32 Marauder firmware still does not exist!")
 		return
+
 def checkforoldhardwarebin():
 	espoldhardwarefwc=('ESP32Marauder/esp32_marauder/esp32_marauder_v[0-9]_[0-9]_[0-9][0-9]_*_old_hardware.bin')
 	if not glob.glob(espoldhardwarefwc):
@@ -159,6 +174,7 @@ def prereqcheck():
 	return
 
 def flash_esp32marauder():
+	global serialport
 	erase_esp32fw()
 	print("Flashing ESP32 Marauder Firmware...")
 	os.system("python3 "+esptoolfile+ " -p "+ serialport+ " -b "+ BR+ " -c "+chip+" --before default_reset -a no_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 4MB 0x1000 "+ extraesp32bins +"/Marauder/bootloader.bin 0x8000 "+ extraesp32bins +"/Marauder/partitions.bin 0x10000 "+ esp32marauderfw)
@@ -168,15 +184,6 @@ def flash_esp32marauder():
 def flash_esp32wroom():
 	global serialport
 	print("Flashing ESP32 Marauder Firmware onto ESP32-Wroom...")
-	if runningOS=="Windows":
-		vid="10C4"
-		com_port=None
-		ports=list(serial.tools.list_ports.comports())
-		for port in ports:
-			if vid in port.hwid:
-				serialport=port.device
-	if serialport=="/dev/ttyACM0":
-		serialport="/dev/ttyUSB0"
 	erase_esp32fw()
 	os.system("python3 "+esptoolfile+" -p"+serialport+" -b"+BR+" --before default_reset --after hard_reset -c esp32 write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x8000 "+scorpbins+"/partitions.bin 0x1000 "+scorpbins+"/bootloader.bin 0x10000 "+espoldhardwarefw)
 	print("ESP32-Wroom has been flashed with Marauder!")
@@ -184,8 +191,6 @@ def flash_esp32wroom():
 
 def save_flipperbmsettings():
 	global serialport
-	if serialport=="/dev/cu.usbmodem01":
-		serialport="/dev/cu.usbmodemblackmagic1"
 	print("Saving Flipper Blackmagic WiFi Settings to Extra_ESP32_Bins/Blackmagic/nvs.bin")
 	os.system("python3 "+esptoolfile+" -p "+serialport+" -b "+BR+" -c "+chip+" -a no_reset read_flash 0x9000 0x6000 "+extraesp32bins+ "/Blackmagic/nvs.bin")
 	return

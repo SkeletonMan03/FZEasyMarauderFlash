@@ -30,8 +30,7 @@ This script is now capable of flashing Marauder onto an ESP32-WROOM!
 
 ## TODO:
 Code cleanup.  
-See if there is a better way of determining serial port on Linux and Mac.  
-Add more chip compatibility
+Add more chip compatibility.
 
 ## Acknowledgements:
 Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz as this wouldn't exist without the original project
