@@ -5,6 +5,7 @@ from git import Repo
 import glob
 import time
 import shutil
+import serial.tools.list_ports
 OPENASCII='''
 #########################################
 #	Marauder Flasher Script		#
@@ -24,14 +25,20 @@ print("Make sure your ESP32 is plugged in!")
 BR=str("115200")
 
 #I think the serialport section could technically be left blank...
-
+global runningOS
+global serialport
 runningOS=platform.system()
 if runningOS=="Linux":
 	serialport="/dev/ttyACM0"
 elif runningOS=="Darwin":
 	serialport="/dev/cu.usbmodem01"
 elif runningOS=="Windows":
-	serialport=os.popen('wmic path Win32_SerialPort get DeviceID^,PNPDeviceID^|findstr /i VID_303A')
+	vid="303A"
+	com_port=None
+	ports=list(serial.tools.list_ports.comports())
+	for port in ports:
+		if vid in port.hwid:
+			serialport=port.device
 
 def checkforesptool():
 	esptoolrepo="https://github.com/espressif/esptool.git"
@@ -46,15 +53,12 @@ def checkforesptool():
 	return
 
 def checkforscorpbins():
-	scorpbinsrepo="https://github.com/SkeletonMan03/TempScorpBins.git"
 	global scorpbins
-	scorpbins=("ScorpBins")
+	scorpbins=(extraesp32bins+"/Marauder/WROOM")
 	if os.path.exists(scorpbins):
 		print("ScorpBins exists!")
 	else:
 		print("The ScorpBins folder does not exist!")
-		print("That's okay, downloading them now...")
-		Repo.clone_from(scorpbinsrepo, scorpbins)
 	return
 
 def checkforextrabins():
@@ -67,6 +71,7 @@ def checkforextrabins():
 		print("The extra ESP32 bins folder does not exist!")
 		print("That's okay, downloading them now...")
 		Repo.clone_from(extraesp32binsrepo, extraesp32bins)
+	checkforscorpbins()
 	return
 
 def choose_fw():
@@ -151,7 +156,6 @@ def prereqcheck():
 	checkforesptool()
 	checkforextrabins()
 	checkforesp32marauder()
-	checkforscorpbins()
 	checkforoldhardwarebin()
 	return
 
@@ -165,8 +169,16 @@ def flash_esp32marauder():
 def flash_esp32wroom():
 	global serialport
 	print("Flashing ESP32 Marauder Firmware onto ESP32-Wroom...")
+	if runningOS=="Windows":
+		vid="10C4"
+		com_port=None
+		ports=list(serial.tools.list_ports.comports())
+		for port in ports:
+			if vid in port.hwid:
+				serialport=port.device
 	if serialport=="/dev/ttyACM0":
 		serialport="/dev/ttyUSB0"
+
 	erase_esp32fw()
 	os.system("python3 "+esptoolfile+" -p"+serialport+" -b"+BR+" --before default_reset --after hard_reset -c esp32 write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x8000 "+scorpbins+"/partitions.bin 0x1000 "+scorpbins+"/bootloader.bin 0x10000 "+espoldhardwarefw)
 	print("ESP32-Wroom has been flashed with Marauder!")
