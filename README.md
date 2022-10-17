@@ -28,6 +28,11 @@ This script pulls all of its resources from the proper Github repositories in or
 The only dependencies it does not get by itself are the required Python modules and Windows tools.  
 This script is now capable of flashing Marauder onto an ESP32-WROOM!
 
+## TODO:
+Code cleanup.  
+See if there is a better way of determining serial port on Linux and Mac.  
+Add more chip compatibility
+
 ## Acknoledgements:
 Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz as this wouldn't exist without the original project
 * [justcallmekoko](https://github.com/justcallmekoko/ESP32Marauder) for the AWESOME work in developing Marauder and porting it to the Flipper.
