@@ -177,7 +177,6 @@ def flash_esp32wroom():
 				serialport=port.device
 	if serialport=="/dev/ttyACM0":
 		serialport="/dev/ttyUSB0"
-
 	erase_esp32fw()
 	os.system("python3 "+esptoolfile+" -p"+serialport+" -b"+BR+" --before default_reset --after hard_reset -c esp32 write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x8000 "+scorpbins+"/partitions.bin 0x1000 "+scorpbins+"/bootloader.bin 0x10000 "+espoldhardwarefw)
 	print("ESP32-Wroom has been flashed with Marauder!")
@@ -209,8 +208,6 @@ def update_option():
 		shutil.rmtree("Extra_ESP32_Bins")
 	if os.path.exists("esptool"):
 		shutil.rmtree("esptool")
-	if os.path.exists("ScorpBins"):
-		shutil.rmtree("ScorpBins")
 	prereqcheck()
 	return
 
