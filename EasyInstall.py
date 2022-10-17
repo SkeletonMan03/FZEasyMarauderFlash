@@ -24,7 +24,6 @@ print(OPENASCII)
 print("Make sure your ESP32 is plugged in!")
 BR=str("115200")
 
-#I think the serialport section could technically be left blank...
 global runningOS
 global serialport
 runningOS=platform.system()
