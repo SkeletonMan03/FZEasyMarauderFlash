@@ -28,6 +28,11 @@ This script pulls all of its resources from the proper Github repositories in or
 The only dependencies it does not get by itself are the required Python modules and Windows tools.  
 This script is now capable of flashing Marauder onto an ESP32-WROOM!
 
+## Compatible boards
+* Flipper Zero WiFi Devboard  
+* ESP32-S2 (The ESP chip that is on the WiFi Devboard)  
+* ESP32-WROOM  
+
 ## TODO:
 Code cleanup.  
 Add more chip compatibility.

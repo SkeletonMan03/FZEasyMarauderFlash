@@ -33,7 +33,7 @@ def checkfordevboardserialport():
 		if vid in port.hwid:
 			serialport=port.device
 		else:
-			print("WiFi Devboard not plugged in!")
+			print("WiFi Devboard or ESP32-S2 not plugged in!")
 	return
 
 def checkforesp32serialport():
@@ -45,7 +45,7 @@ def checkforesp32serialport():
 		if vid in port.hwid:
 			serialport=port.device
 		else:
-			print("ESP32 not plugged in!")
+			print("ESP32-WROOM not plugged in!")
 	return
 
 def checkforesptool():
@@ -84,21 +84,21 @@ def checkforextrabins():
 
 def choose_fw():
 	choices='''
-//==============================================\\\ 
-|| Options:					||
-|| 1) Flash Marauder on WiFi Devboard		||
-|| 2) Save Flipper Blackmagic WiFi settings	||
-|| 3) Flash Flipper Blackmagic			||
-|| 4) Flash Marauder on ESP32-WROOM		||
-|| 5) Update all files				||
-|| 6) Exit					||
-\\\==============================================//
+//======================================================\\\ 
+|| Options:						||
+|| 1) Flash Marauder on WiFi Devboard or ESP32-S2	||
+|| 2) Save Flipper Blackmagic WiFi settings		||
+|| 3) Flash Flipper Blackmagic				||
+|| 4) Flash Marauder on ESP32-WROOM			||
+|| 5) Update all files					||
+|| 6) Exit						||
+\\\======================================================//
 '''
 	global chip
 	print(choices)
 	fwchoice=int(input("Please enter the number of your choice: "))
 	if fwchoice==1:
-		print("You have chosen to flash Marauder on a WiFi devboard!")
+		print("You have chosen to flash Marauder on a WiFi devboard or ESP32-S2!")
 		chip="esp32s2"
 		checkfordevboardserialport()
 		flash_esp32marauder()
@@ -183,10 +183,10 @@ def flash_esp32marauder():
 
 def flash_esp32wroom():
 	global serialport
-	print("Flashing ESP32 Marauder Firmware onto ESP32-Wroom...")
+	print("Flashing ESP32 Marauder Firmware onto ESP32-WROOM...")
 	erase_esp32fw()
 	os.system("python3 "+esptoolfile+" -p"+serialport+" -b"+BR+" --before default_reset --after hard_reset -c esp32 write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x8000 "+scorpbins+"/partitions.bin 0x1000 "+scorpbins+"/bootloader.bin 0x10000 "+espoldhardwarefw)
-	print("ESP32-Wroom has been flashed with Marauder!")
+	print("ESP32-WROOM has been flashed with Marauder!")
 	return
 
 def save_flipperbmsettings():
