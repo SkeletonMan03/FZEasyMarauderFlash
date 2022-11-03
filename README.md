@@ -34,8 +34,8 @@ This script is now capable of flashing Marauder onto an ESP32-WROOM!
 * ESP32-WROOM  
 
 ## TODO:
-Code cleanup.  
-Add more chip compatibility.
+* Code cleanup.  
+* Add more chip compatibility.
 
 ## Acknowledgements:
 Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz as this wouldn't exist without the original project
@@ -48,4 +48,4 @@ Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz
 * [SkeletonMan](https://github.com/SkeletonMan03) Creating this Python flasher in order to try to make a multi-os flasher since the Batch script obviously could not run on Linux or Mac OS X
 * [CorbanR](https://github.com/CorbanR) Forking and fixing instructions and adding a requirement needed for Mac OS X
 * [dchalm](https://github.com/dchalm) Forking and fixing mistakes I should have noticed. Thank you!
-* [Scorp](https://github.com/scorpion44/FZEasyMarauderFlash_ScorpBins) Compiling needed bins to be able to flash to ESP32-Wroom
+* [Scorp](https://github.com/scorpion44/FZEasyMarauderFlash_ScorpBins) Compiling needed bins to be able to flash to ESP32-WROOM
