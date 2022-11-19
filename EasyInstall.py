@@ -26,26 +26,32 @@ BR=str("115200")
 
 def checkfordevboardserialport():
 	global serialport
+	serialport=''
 	vid="303A"
 	com_port=None
 	ports=list(serial.tools.list_ports.comports())
 	for port in ports:
 		if vid in port.hwid:
 			serialport=port.device
-		else:
-			print("WiFi Devboard or ESP32-S2 not plugged in!")
+	if serialport=='':
+		print("WiFi Devboard or ESP32-S2 is not plugged in!")
+		print("Please plug in a WiFi Devboard or ESP32-S2 and try again")
+		choose_fw()
 	return
 
 def checkforesp32serialport():
 	global serialport
+	serialport=''
 	vid="10C4"
 	com_port=None
 	ports=list(serial.tools.list_ports.comports())
 	for port in ports:
 		if vid in port.hwid:
 			serialport=port.device
-		else:
-			print("ESP32-WROOM not plugged in!")
+	if serialport=='':
+		print("ESP32-WROOM is not plugged in!")
+		print("Please plug in an ESP32-WROOM then try again")
+		choose_fw()
 	return
 
 def checkforesptool():
@@ -131,7 +137,7 @@ def choose_fw():
 def erase_esp32fw():
 	global serialport
 	print("Erasing firmware...")
-	os.system("python3 "+esptoolfile+ " -p "+ serialport+ " -b "+ BR+ " -c "+chip+" --before default_reset -a no_reset erase_region 0x9000 0x6000")
+	os.system("python3 "+esptoolfile+ " -p "+serialport+ " -b "+ BR+ " -c "+chip+" --before default_reset -a no_reset erase_region 0x9000 0x6000")
 	print("Firmware erased!")
 	print("Waiting 5 seconds...")
 	time.sleep(5)
@@ -177,7 +183,7 @@ def flash_esp32marauder():
 	global serialport
 	erase_esp32fw()
 	print("Flashing ESP32 Marauder Firmware...")
-	os.system("python3 "+esptoolfile+ " -p "+ serialport+ " -b "+ BR+ " -c "+chip+" --before default_reset -a no_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 4MB 0x1000 "+ extraesp32bins +"/Marauder/bootloader.bin 0x8000 "+ extraesp32bins +"/Marauder/partitions.bin 0x10000 "+ esp32marauderfw)
+	os.system("python3 "+esptoolfile+ " -p "+serialport+ " -b "+ BR+ " -c "+chip+" --before default_reset -a no_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 4MB 0x1000 "+ extraesp32bins +"/Marauder/bootloader.bin 0x8000 "+ extraesp32bins +"/Marauder/partitions.bin 0x10000 "+ esp32marauderfw)
 	print("ESP32 has been flashed with Marauder!")
 	return
 
@@ -185,7 +191,7 @@ def flash_esp32wroom():
 	global serialport
 	print("Flashing ESP32 Marauder Firmware onto ESP32-WROOM...")
 	erase_esp32fw()
-	os.system("python3 "+esptoolfile+" -p"+serialport+" -b"+BR+" --before default_reset --after hard_reset -c esp32 write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x8000 "+scorpbins+"/partitions.bin 0x1000 "+scorpbins+"/bootloader.bin 0x10000 "+espoldhardwarefw)
+	os.system("python3 "+esptoolfile+" -p"+serialport+" -b"+BR+" --before default_reset --after hard_reset -c "+chip+" write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x8000 "+scorpbins+"/partitions.bin 0x1000 "+scorpbins+"/bootloader.bin 0x10000 "+espoldhardwarefw)
 	print("ESP32-WROOM has been flashed with Marauder!")
 	return
 
