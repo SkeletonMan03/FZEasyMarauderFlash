@@ -33,9 +33,17 @@ This script is now capable of flashing Marauder onto an ESP32-WROOM!
 * ESP32-S2 (The ESP chip that is on the WiFi Devboard)  
 * ESP32-WROOM  
 
+## How to connect an ESP32-WROOM to the Flipper Zero
+ESP32-WROOM -> Flipper Zero  
+TX0 -> RX  
+RX0 -> TX  
+GND -> GND  
+3v3 -> 3v3  
+
 ## TODO:
 * Code cleanup.  
 * Add more chip compatibility.
+* Fix Windows bug where files cannot be deleted in order to be updated
 
 ## Acknowledgements:
 Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz as this wouldn't exist without the original project
