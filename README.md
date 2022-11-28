@@ -44,6 +44,7 @@ GND -> GND
 * Code cleanup.  
 * Add more chip compatibility.
 * Fix Windows bug where files cannot be deleted in order to be updated
+* Attempt to accommodate 3rd-party knock-off chips that are not from Espressif
 
 ## Acknowledgements:
 Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz as this wouldn't exist without the original project
