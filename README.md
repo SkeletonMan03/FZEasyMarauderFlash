@@ -18,7 +18,7 @@ If you are flashing an ESP32 board, you need to install the [driver from here](h
 6) Select the option of what you want to do
 
 * Important note: You may need to run this script with `sudo` or as Administrator in Windows
-* Second important note: If you're flashing an ESP32-WROOM, you should only need to do steps 0, 1, and 4  
+* Second important note: If you're flashing an ESP32-WROOM, you should only need to do steps 0, 1, 4, and 5   
 
 ## This project is based on the Windows Marauder flasher batch script
 
