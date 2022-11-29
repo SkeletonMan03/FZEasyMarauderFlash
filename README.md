@@ -18,6 +18,7 @@ If you are flashing an ESP32 board, you need to install the [driver from here](h
 6) Select the option of what you want to do
 
 * Important note: You may need to run this script with `sudo` or as Administrator in Windows
+* Second important note: If you're flashing an ESP32-WROOM, you should only need to do steps 0, 1, and 4  
 
 ## This project is based on the Windows Marauder flasher batch script
 
@@ -26,7 +27,8 @@ You can find it [here in UberGuidoZ's repo](https://github.com/UberGuidoZ/Flippe
 ## Improvements over the batch script
 This script pulls all of its resources from the proper Github repositories in order to make sure you are up-to-date.  
 The only dependencies it does not get by itself are the required Python modules and Windows tools.  
-This script is now capable of flashing Marauder onto an ESP32-WROOM!
+This script is now capable of flashing Marauder onto an ESP32-WROOM.  
+This script can also flash at least 1 knockoff ESP32-WROOM.  
 
 ## Compatible boards
 * Flipper Zero WiFi Devboard  
@@ -58,3 +60,4 @@ Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz
 * [CorbanR](https://github.com/CorbanR) Forking and fixing instructions and adding a requirement needed for Mac OS X
 * [dchalm](https://github.com/dchalm) Forking and fixing mistakes I should have noticed. Thank you!
 * [Scorp](https://github.com/scorpion44/FZEasyMarauderFlash_ScorpBins) Compiling needed bins to be able to flash to ESP32-WROOM
+* [jacklythgoee](https://github.com/jacklythgoee) For getting a knockoff ESP32-WROOM and giving me info to be able to try to detect it so it could be flashed. 

@@ -1,3 +1,4 @@
 gitpython
 glob2
 pyserial
+requests

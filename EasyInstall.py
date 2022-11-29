@@ -6,6 +6,8 @@ import glob
 import time
 import shutil
 import serial.tools.list_ports
+import requests
+import json
 OPENASCII='''
 #########################################
 #	Marauder Flasher Script		#
@@ -50,8 +52,24 @@ def checkforesp32serialport():
 			serialport=port.device
 	if serialport=='':
 		print("ESP32-WROOM is not plugged in!")
+		print("Checking for knockoff ESP32-WROOM")
+		checkforknockoffesp32serialport()
+	return
+
+def checkforknockoffesp32serialport():
+	global serialport
+	serialport=''
+	vid="1A86"
+	com_port=None
+	ports=list(serial.tools.list_ports.comports())
+	for port in ports:
+		if vid in port.hwid:
+			serialport=port.device
+	if serialport=='':
+		print("ESP32-WROOM is not plugged in!")
 		print("Please plug in an ESP32-WROOM then try again")
 		choose_fw()
+	print("Warning! You are using a knockoff ESP32-WROOM! Success is not guaranteed!")
 	return
 
 def checkforesptool():
@@ -144,23 +162,34 @@ def erase_esp32fw():
 	return
 
 def checkforesp32marauder():
-	marauderfwrepo="https://github.com/justcallmekoko/ESP32Marauder.git"
-	esp32marauderfwc=('ESP32Marauder/esp32_marauder/esp32_marauder_v[0-9]_[0-9]_[0-9][0-9]_*_flipper.bin')
+	print("Checking for Marauder releases")
+	if os.path.exists("ESP32Marauder/releases"):
+		print("Great, you have the Marauder releases folder!")
+	else:
+		print("Marauder releases folder does not exist, but that's okay, downloading them now...")
+		os.makedirs('ESP32Marauder/releases')
+		marauderapi="https://api.github.com/repos/justcallmekoko/ESP32Marauder/releases/latest"
+		response=requests.get(marauderapi)
+		jsondata=response.json()
+		assetdls=range(0,5)
+		for assetdl in assetdls:
+			marauderasset=jsondata['assets'][assetdl]['browser_download_url']
+			if marauderasset.find('/'):
+				filename=(marauderasset.rsplit('/', 1)[1])
+			downloadfile=requests.get(marauderasset, allow_redirects=True)
+			open('ESP32Marauder/releases/'+filename, 'wb').write(downloadfile.content)
+	esp32marauderfwc=('ESP32Marauder/releases/esp32_marauder_v[0-9]_[0-9]_[0-9][0-9]_*_flipper.bin')
 	if not glob.glob(esp32marauderfwc):
-		print("No ESP32 Marauder firmware exists!")
-		print("But that's okay!")
-		print("Downloading Marauder repo...")
-		Repo.clone_from(marauderfwrepo, "ESP32Marauder")
+		print("No ESP32 Marauder firmware exists somehow!")
 	global esp32marauderfw
 	for esp32marauderfw in glob.glob(esp32marauderfwc):
 		if os.path.exists(esp32marauderfw):
 			print("ESP32 Marauder firmware exists at", esp32marauderfw)
-		else:
-			print("Somehow, the ESP32 Marauder firmware still does not exist!")
-		return
+	return
+
 
 def checkforoldhardwarebin():
-	espoldhardwarefwc=('ESP32Marauder/esp32_marauder/esp32_marauder_v[0-9]_[0-9]_[0-9][0-9]_*_old_hardware.bin')
+	espoldhardwarefwc=('ESP32Marauder/releases/esp32_marauder_v[0-9]_[0-9]_[0-9][0-9]_*_old_hardware.bin')
 	if not glob.glob(espoldhardwarefwc):
 		print("old_hardware bin does not exist!")
 	global espoldhardwarefw
