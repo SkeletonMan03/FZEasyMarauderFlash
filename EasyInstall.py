@@ -8,6 +8,7 @@ import shutil
 import serial.tools.list_ports
 import requests
 import json
+import esptool
 OPENASCII='''
 #########################################
 #	Marauder Flasher Script		#
@@ -70,18 +71,6 @@ def checkforknockoffesp32serialport():
 		print("Please plug in an ESP32-WROOM then try again")
 		choose_fw()
 	print("Warning! You are using a knockoff ESP32-WROOM! Success is not guaranteed!")
-	return
-
-def checkforesptool():
-	esptoolrepo="https://github.com/espressif/esptool.git"
-	global esptoolfile
-	esptoolfile=("esptool/esptool.py")
-	if os.path.exists(esptoolfile):
-		print("The esptool folder exists!")
-	else:
-		print("The esptool folder does not exist!")
-		print("That's okay, downloading ESPTool...")
-		Repo.clone_from(esptoolrepo, "esptool")
 	return
 
 def checkforscorpbins():
@@ -155,7 +144,7 @@ def choose_fw():
 def erase_esp32fw():
 	global serialport
 	print("Erasing firmware...")
-	os.system("python3 "+esptoolfile+ " -p "+serialport+ " -b "+ BR+ " -c "+chip+" --before default_reset -a no_reset erase_region 0x9000 0x6000")
+	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'erase_region', '0x9000', '0x6000'])
 	print("Firmware erased!")
 	print("Waiting 5 seconds...")
 	time.sleep(5)
@@ -202,7 +191,6 @@ def checkforoldhardwarebin():
 
 def prereqcheck():
 	print("Checking for prerequisites...")
-	checkforesptool()
 	checkforextrabins()
 	checkforesp32marauder()
 	checkforoldhardwarebin()
@@ -212,7 +200,7 @@ def flash_esp32marauder():
 	global serialport
 	erase_esp32fw()
 	print("Flashing ESP32 Marauder Firmware...")
-	os.system("python3 "+esptoolfile+ " -p "+serialport+ " -b "+ BR+ " -c "+chip+" --before default_reset -a no_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 4MB 0x1000 "+ extraesp32bins +"/Marauder/bootloader.bin 0x8000 "+ extraesp32bins +"/Marauder/partitions.bin 0x10000 "+ esp32marauderfw)
+	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Marauder/bootloader.bin', '0x8000', extraesp32bins+'/Marauder/partitions.bin', '0x10000', esp32marauderfw])
 	print("ESP32 has been flashed with Marauder!")
 	return
 
@@ -220,24 +208,24 @@ def flash_esp32wroom():
 	global serialport
 	print("Flashing ESP32 Marauder Firmware onto ESP32-WROOM...")
 	erase_esp32fw()
-	os.system("python3 "+esptoolfile+" -p"+serialport+" -b"+BR+" --before default_reset --after hard_reset -c "+chip+" write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x8000 "+scorpbins+"/partitions.bin 0x1000 "+scorpbins+"/bootloader.bin 0x10000 "+espoldhardwarefw)
+	esptool.main(['-p', serialport, '-b', BR, '--before', 'default_reset', '--after', 'hard_reset', '-c', chip, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '2MB', '0x8000', scorpbins+'/partitions.bin', '0x1000', scorpbins+'/bootloader.bin', '0x10000', espoldhardwarefw])
 	print("ESP32-WROOM has been flashed with Marauder!")
 	return
 
 def save_flipperbmsettings():
 	global serialport
 	print("Saving Flipper Blackmagic WiFi Settings to Extra_ESP32_Bins/Blackmagic/nvs.bin")
-	os.system("python3 "+esptoolfile+" -p "+serialport+" -b "+BR+" -c "+chip+" -a no_reset read_flash 0x9000 0x6000 "+extraesp32bins+ "/Blackmagic/nvs.bin")
+	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '-a', 'no_reset', 'read_flash', '0x9000', '0x6000', extraesp32bins+'/Blackmagic/nvs.bin'])
 	return
 
 def flash_flipperbm():
 	if os.path.exists(extraesp32bins+"/Blackmagic/nvs.bin"):
 		print("Flashing Flipper Blackmagic with WiFi Settings restore")
-		os.system("python3 "+esptoolfile+" -p "+serialport+" -b "+BR+" -c "+chip+" --before default_reset -a no_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 4MB 0x1000 "+extraesp32bins+"/Blackmagic/bootloader.bin 0x8000 "+extraesp32bins+"/Blackmagic/partition-table.bin 0x9000 "+extraesp32bins+"/Blackmagic/nvs.bin 0x10000 "+extraesp32bins+"/Blackmagic/blackmagic.bin")
+		esptool.main(['-p', serialport, '-b', BR, '-c', 'chip', '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Blackmagic/bootloader.bin', '0x8000', extraesp32bins+'/Blackmagic/partition-table.bin', '0x9000', extraesp32bins+'/Blackmagic/nvs.bin', '0x10000', extraesp32bins+'/Blackmagic/blackmagic.bin'])
 	else:
 		print("Flashing Flipper Blackmagic without WiFi Settings restore")
 		erase_esp32fw()
-		os.system("python3 "+esptoolfile+" -p "+serialport+" -b "+BR+" -c "+chip+" --before default_reset -a no_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 4MB 0x1000 "+extraesp32bins+"/Blackmagic/bootloader.bin 0x8000 "+extraesp32bins+"/Blackmagic/partition-table.bin 0x10000 "+extraesp32bins+"/Blackmagic/blackmagic.bin")
+		esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Blackmagic/bootloader.bin', '0x8000', extraesp32bins+'/Blackmagic/partition-table.bin', '0x10000', extraesp32bins+'/Blackmagic/blackmagic.bin'])
 	return
 
 def update_option():
