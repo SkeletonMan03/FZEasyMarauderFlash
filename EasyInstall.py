@@ -38,8 +38,23 @@ def checkfordevboardserialport():
 			serialport=port.device
 	if serialport=='':
 		print("WiFi Devboard or ESP32-S2 is not plugged in!")
+		checkforotheresp32s2()
+	return
+
+def checkforotheresp32s2():
+	global serialport
+	serialport=''
+	vid="10C4"
+	com_port=None
+	ports=list(serial.tools.list_ports.comports())
+	for port in ports:
+		if vid in port.hwid:
+			serialport=port.device
+	if serialport=='':
+		print("No ESP32-S2 was detected!")
 		print("Please plug in a WiFi Devboard or ESP32-S2 and try again")
 		choose_fw()
+	print("You are using some other ESP chip. Hopefully an S2 chip with 4MB of flash")
 	return
 
 def checkforesp32serialport():
