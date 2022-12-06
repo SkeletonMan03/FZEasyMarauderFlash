@@ -213,7 +213,7 @@ def flash_flipperbm():
 		print("Flashing Flipper Blackmagic without WiFi Settings restore")
 		erase_esp32fw()
 		esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Blackmagic/bootloader.bin', '0x8000', extraesp32bins+'/Blackmagic/partition-table.bin', '0x10000', extraesp32bins+'/Blackmagic/blackmagic.bin'])
-		print(Fore.GREEN+"Flipper Blackmagic has been flashed without WiFi Swttings restored"+Style.RESET_ALL)
+		print(Fore.GREEN+"Flipper Blackmagic has been flashed without WiFi Settings restored"+Style.RESET_ALL)
 	return
 
 def update_option():
