@@ -9,125 +9,65 @@ import serial.tools.list_ports
 import requests
 import json
 import esptool
-OPENASCII='''
+from colorama import Fore, Back, Style
+
+OPENASCII=Fore.GREEN+'''
 #########################################
-#	Marauder Flasher Script		#
-#	Python edition by SkeletonMan	#
-#	based off of a Windows based	#
-#	script by Frog, UberGuidoz,	#
-#	and ImprovingRigamarole		#
+#    Marauder Flasher Script		#
+#    Python edition by SkeletonMan	#
+#    based off of a Windows based	#
+#    script by Frog, UberGuidoz,	#
+#    and ImprovingRigamarole		#
 #					#
-#	Special thanks to L0rd_K0nda	#
-#	for doing testing for me!	#
-#	Thanks to Scorp for compiling	#
-#	Needed bins for the ESP32-WROOM	#
+#    Thanks to everyone who has done	#
+#    testing on various chips for me	#
+#    Thanks to Scorp for compiling	#
+#    needed bins for the ESP32-WROOM	#
 #########################################
-'''
+'''+Style.RESET_ALL
+
 print(OPENASCII)
-print("Make sure your ESP32 is plugged in!")
+print("Make sure your ESP32 or WiFi devboard is plugged in!")
 BR=str("115200")
 
-def checkfordevboardserialport():
+def checkforserialport():
 	global serialport
 	serialport=''
-	vid="303A"
+	vids=['303A','10C4','1A86',]
 	com_port=None
 	ports=list(serial.tools.list_ports.comports())
-	for port in ports:
-		if vid in port.hwid:
-			serialport=port.device
+	for vid in vids:
+		for port in ports:
+			if vid in port.hwid:
+				serialport=port.device
+				device=vid
 	if serialport=='':
-		print("WiFi Devboard or ESP32-S2 was not detected!")
-		checkforotheresp32s2()
-	return
-
-def checkforotheresp32s2():
-	print("Checking for other ESP32-S2")
-	global serialport
-	serialport=''
-	vid="10C4"
-	com_port=None
-	ports=list(serial.tools.list_ports.comports())
-	for port in ports:
-		if vid in port.hwid:
-			serialport=port.device
-	if serialport=='':
-		print("No ESP32-S2 was detected!")
-		checkforknockoffesp32s2()
-	else:
-		print("You are using some other ESP32 chip. Hopefully an ESP32-S2 chip with 4MB of flash")
-	return
-
-def checkforknockoffesp32s2():
-	print("Checking for knock-off ESP32-S2")
-	global serialport
-	serialport=''
-	vid="1A86"
-	com_port=None
-	ports=list(serial.tools.list_ports.comports())
-	for port in ports:
-		if vid in port.hwid:
-			serialport=port.device
-	if serialport=='':
-		print("No ESP32-S2 was detected!")
-		print("Please plug in a WiFi Devboard or ESP32-S2 and try again")
+		print(Fore.RED+"No ESP32 device was detected!"+Style.RESET_ALL)
+		print(Fore.RED+"Please plug in a Flipper WiFi devboard or an ESP32 chip and try again"+Style.RESET_ALL)
 		choose_fw()
-	else:
-		print("You are using a knockoff ESP32 of some kind (hopefully an S2 or an S2-WROVER)! Success is not guaranteed!")
-	return
+	if device=='':
+		return
+	elif device=='303A':
+		print(Fore.Blue+"You are most likely using a Flipper Zero WiFi Devboard or an ESP32-S2"+Style.RESET_ALL)
+	elif device=='10C4':
+		print(Fore.BLUE+"You are most likely using an ESP32-WROOM or an ESP32-S2-WROVER"+Style.RESET_ALL)
+	elif device=='1A86':
+		print(Fore.MAGENTA+"You are most likely using a knock-off ESP32 chip! Success is not guaranteed!"+Style.RESET_ALL)
 
-def checkforesp32serialport():
-	global serialport
-	serialport=''
-	vid="10C4"
-	com_port=None
-	ports=list(serial.tools.list_ports.comports())
-	for port in ports:
-		if vid in port.hwid:
-			serialport=port.device
-	if serialport=='':
-		print("ESP32-WROOM is not plugged in!")
-		checkforknockoffesp32serialport()
-	return
-
-def checkforknockoffesp32serialport():
-	print("Checking for knock-off ESP32-WROOM")
-	global serialport
-	serialport=''
-	vid="1A86"
-	com_port=None
-	ports=list(serial.tools.list_ports.comports())
-	for port in ports:
-		if vid in port.hwid:
-			serialport=port.device
-	if serialport=='':
-		print("ESP32-WROOM is not plugged in!")
-		print("Please plug in an ESP32-WROOM then try again")
-		choose_fw()
-	else:
-		print("Warning! You are using a knockoff ESP32-WROOM! Success is not guaranteed!")
-	return
-
-def checkforscorpbins():
-	global scorpbins
-	scorpbins=(extraesp32bins+"/Marauder/WROOM")
-	if os.path.exists(scorpbins):
-		print("ScorpBins exists!")
-	else:
-		print("The ScorpBins folder does not exist!")
 	return
 
 def checkforextrabins():
 	extraesp32binsrepo="https://github.com/UberGuidoZ/Marauder_BINs.git"
 	global extraesp32bins
 	extraesp32bins=("Extra_ESP32_Bins")
+	global scorpbins
+	scorpbins=(extraesp32bins+"/Marauder/WROOM")
 	if os.path.exists(extraesp32bins):
 		print("The extra ESP32 bins folder exists!")
 	else:
 		print("The extra ESP32 bins folder does not exist!")
 		print("That's okay, downloading them now...")
 		Repo.clone_from(extraesp32binsrepo, extraesp32bins)
-	checkforscorpbins()
 	return
 
 def choose_fw():
@@ -146,24 +86,24 @@ def choose_fw():
 	print(choices)
 	fwchoice=int(input("Please enter the number of your choice: "))
 	if fwchoice==1:
-		print("You have chosen to flash Marauder on a WiFi devboard or ESP32-S2!")
+		print("You have chosen to flash Marauder on a WiFi devboard or ESP32-S2")
 		chip="esp32s2"
-		checkfordevboardserialport()
+		checkforserialport()
 		flash_esp32marauder()
 	elif fwchoice==2:
 		print("You have chosen to save Flipper Blackmagic WiFi settings")
 		chip="esp32s2"
-		checkfordevboardserialport()
+		checkforserialport()
 		save_flipperbmsettings()
 	elif fwchoice==3:
 		print("You have chosen to flash Flipper Blackmagic")
 		chip="esp32s2"
-		checkfordevboardserialport()
+		checkforserialport()
 		flash_flipperbm()
 	elif fwchoice==4:
 		print("You have chosen to flash Marauder onto an ESP32-WROOM")
 		chip="esp32"
-		checkforesp32serialport()
+		checkforserialport()
 		flash_esp32wroom()
 	elif fwchoice==5:
 		print("You have chosen to update all of the files")
@@ -173,7 +113,8 @@ def choose_fw():
 		print("Exiting!")
 		exit()
 	else:
-		print("Invalid option!")
+		print(Fore.RED+"Invalid option!"+Style.RESET_ALL)
+		exit()
 	return
 
 def erase_esp32fw():
@@ -269,8 +210,6 @@ def update_option():
 		shutil.rmtree("ESP32Marauder")
 	if os.path.exists("Extra_ESP32_Bins"):
 		shutil.rmtree("Extra_ESP32_Bins")
-	if os.path.exists("esptool"):
-		shutil.rmtree("esptool")
 	prereqcheck()
 	return
 
