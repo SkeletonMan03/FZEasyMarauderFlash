@@ -37,11 +37,12 @@ def checkfordevboardserialport():
 		if vid in port.hwid:
 			serialport=port.device
 	if serialport=='':
-		print("WiFi Devboard or ESP32-S2 is not plugged in!")
+		print("WiFi Devboard or ESP32-S2 was not detected!")
 		checkforotheresp32s2()
 	return
 
 def checkforotheresp32s2():
+	print("Checking for other ESP32-S2")
 	global serialport
 	serialport=''
 	vid="10C4"
@@ -53,10 +54,12 @@ def checkforotheresp32s2():
 	if serialport=='':
 		print("No ESP32-S2 was detected!")
 		checkforknockoffesp32s2()
-	print("You are using some other ESP chip. Hopefully an S2 chip with 4MB of flash")
+	else:
+		print("You are using some other ESP chip. Hopefully an S2 chip with 4MB of flash")
 	return
 
 def checkforknockoffesp32s2():
+	print("Checking for knock-off ESP32-S2")
 	global serialport
 	serialport=''
 	vid="1A86"
@@ -69,7 +72,8 @@ def checkforknockoffesp32s2():
 		print("No ESP32-S2 was detected!")
 		print("Please plug in a WiFi Devboard or ESP32-S2 and try again")
 		choose_fw()
-	print("You are using a knockoff ESP32 of some kind (hopefully an S2 or an S2-WROVER)! Success is not guaranteed!")
+	else:
+		print("You are using a knockoff ESP32 of some kind (hopefully an S2 or an S2-WROVER)! Success is not guaranteed!")
 	return
 
 def checkforesp32serialport():
@@ -88,6 +92,7 @@ def checkforesp32serialport():
 	return
 
 def checkforknockoffesp32serialport():
+	print("Checking for knock-off ESP32-WROOM")
 	global serialport
 	serialport=''
 	vid="1A86"
@@ -100,7 +105,8 @@ def checkforknockoffesp32serialport():
 		print("ESP32-WROOM is not plugged in!")
 		print("Please plug in an ESP32-WROOM then try again")
 		choose_fw()
-	print("Warning! You are using a knockoff ESP32-WROOM! Success is not guaranteed!")
+	else:
+		print("Warning! You are using a knockoff ESP32-WROOM! Success is not guaranteed!")
 	return
 
 def checkforscorpbins():
