@@ -87,7 +87,6 @@ def checkforesp32serialport():
 			serialport=port.device
 	if serialport=='':
 		print("ESP32-WROOM is not plugged in!")
-		print("Checking for knockoff ESP32-WROOM")
 		checkforknockoffesp32serialport()
 	return
 
