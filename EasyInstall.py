@@ -48,7 +48,7 @@ def checkforserialport():
 	if device=='':
 		return
 	elif device=='303A':
-		print(Fore.Blue+"You are most likely using a Flipper Zero WiFi Devboard or an ESP32-S2"+Style.RESET_ALL)
+		print(Fore.BLUE+"You are most likely using a Flipper Zero WiFi Devboard or an ESP32-S2"+Style.RESET_ALL)
 	elif device=='10C4':
 		print(Fore.BLUE+"You are most likely using an ESP32-WROOM or an ESP32-S2-WROVER"+Style.RESET_ALL)
 	elif device=='1A86':
