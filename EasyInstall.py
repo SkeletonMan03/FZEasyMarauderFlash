@@ -125,7 +125,7 @@ def erase_esp32fw():
 		print("Firmware erased!")
 	except Exception:
 		print(Fore.RED+"Something went wrong!"+Style.RESET_ALL)
-		print("Since you've gotten this far, your ESP32 chip can be detected, but you do not have permissions to erase or flash it")
+		print("Since you've gotten this far, your ESP32 chip can be detected, but you do not have permissions to erase or flash it, or you selected the wrong option")
 		print("Try running the script again with sudo or as Administrator")
 		time.sleep(5)
 		exit()
