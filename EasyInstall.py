@@ -193,7 +193,7 @@ def flash_esp32wroom():
 	print("Flashing ESP32 Marauder Firmware onto ESP32-WROOM...")
 	erase_esp32fw()
 	esptool.main(['-p', serialport, '-b', BR, '--before', 'default_reset', '--after', 'hard_reset', '-c', chip, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '2MB', '0x8000', scorpbins+'/partitions.bin', '0x1000', scorpbins+'/bootloader.bin', '0x10000', espoldhardwarefw])
-	print(Fore.Green+"ESP32-WROOM has been flashed with Marauder!"+Style.RESET_ALL)
+	print(Fore.GREEN+"ESP32-WROOM has been flashed with Marauder!"+Style.RESET_ALL)
 	return
 
 def save_flipperbmsettings():
