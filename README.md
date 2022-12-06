@@ -35,7 +35,7 @@ This script should work on most devices that can run Python 3 and can access ser
 * ESP32-S2-WROVER
 * ESP32-WROOM  
 
-## How to connect an ESP32-WROOM,WROVER,etc to the Flipper Zero
+## How to connect an ESP32-WROOM, WROVER, etc to the Flipper Zero
 ESP32 -> Flipper Zero  
 TX0 -> RX  
 RX0 -> TX  
@@ -43,7 +43,6 @@ GND -> GND
 3v3 -> 3v3  
 
 ## TODO:
-* Code cleanup.  
 * Add more chip compatibility.
 * Fix Windows bug where files cannot be deleted in order to be updated
 * Attempt to accommodate 3rd-party knock-off chips that are not from Espressif
