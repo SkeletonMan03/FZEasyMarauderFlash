@@ -52,9 +52,24 @@ def checkforotheresp32s2():
 			serialport=port.device
 	if serialport=='':
 		print("No ESP32-S2 was detected!")
+		checkforknockoffesp32s2()
+	print("You are using some other ESP chip. Hopefully an S2 chip with 4MB of flash")
+	return
+
+def checkforknockoffesp32s2():
+	global serialport
+	serialport=''
+	vid="1A86"
+	com_port=None
+	ports=list(serial.tools.list_ports.comports())
+	for port in ports:
+		if vid in port.hwid:
+			serialport=port.device
+	if serialport=='':
+		print("No ESP32-S2 was detected!")
 		print("Please plug in a WiFi Devboard or ESP32-S2 and try again")
 		choose_fw()
-	print("You are using some other ESP chip. Hopefully an S2 chip with 4MB of flash")
+	print("You are using a knockoff ESP32 of some kind (hopefully an S2 or an S2-WROVER)! Success is not guaranteed!")
 	return
 
 def checkforesp32serialport():
