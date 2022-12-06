@@ -33,7 +33,7 @@ BR=str("115200")
 def checkforserialport():
 	global serialport
 	serialport=''
-	vids=['303A','10C4','1A86',]
+	vids=['303A','10C4','1A86']
 	com_port=None
 	ports=list(serial.tools.list_ports.comports())
 	for vid in vids:
