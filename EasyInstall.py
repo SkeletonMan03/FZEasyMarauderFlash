@@ -55,7 +55,7 @@ def checkforotheresp32s2():
 		print("No ESP32-S2 was detected!")
 		checkforknockoffesp32s2()
 	else:
-		print("You are using some other ESP chip. Hopefully an S2 chip with 4MB of flash")
+		print("You are using some other ESP32 chip. Hopefully an ESP32-S2 chip with 4MB of flash")
 	return
 
 def checkforknockoffesp32s2():
