@@ -120,14 +120,7 @@ def choose_fw():
 def erase_esp32fw():
 	global serialport
 	print("Erasing firmware...")
-	try:
-		esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'erase_region', '0x9000', '0x6000'])
-	except Exception:
-		print(Fore.RED+"Something went wrong!"+Style.RESET_ALL)
-		print(Fore.RED+"Since you've gotten this far, your ESP32 chip can be detected, but you do not have permissions to erase or flash it, or you selected the wrong option"+Style.RESET_ALL)
-		print(Fore.RED+"Try running the script again with sudo or as Administrator"+Style.RESET_ALL)
-		time.sleep(5)
-		exit()
+	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'erase_region', '0x9000', '0x6000'])
 	print("Firmware erased!")
 	print("Waiting 5 seconds...")
 	time.sleep(5)
