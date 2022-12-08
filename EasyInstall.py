@@ -45,6 +45,7 @@ def checkforserialport():
 		print(Fore.RED+"No ESP32 device was detected!"+Style.RESET_ALL)
 		print(Fore.RED+"Please plug in a Flipper WiFi devboard or an ESP32 chip and try again"+Style.RESET_ALL)
 		choose_fw()
+	print("Detected serial port:", serialport)
 	if device=='':
 		return
 	elif device=='303A':
