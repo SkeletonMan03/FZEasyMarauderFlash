@@ -137,7 +137,7 @@ def checkforesp32marauder():
 		marauderapi="https://api.github.com/repos/justcallmekoko/ESP32Marauder/releases/latest"
 		response=requests.get(marauderapi)
 		jsondata=response.json()
-		assetdls=range(0,5)
+		assetdls=range(0,6)
 		for assetdl in assetdls:
 			marauderasset=jsondata['assets'][assetdl]['browser_download_url']
 			if marauderasset.find('/'):
