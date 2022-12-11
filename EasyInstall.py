@@ -129,6 +129,8 @@ def erase_esp32fw():
 	print("Erasing firmware...")
 	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'erase_region', '0x9000', '0x6000'])
 	print("Firmware erased!")
+	print("Waiting 5 seconds...")
+	time.sleep(5)
 	return
 
 def checkforesp32marauder():
