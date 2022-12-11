@@ -45,20 +45,20 @@ def checkforserialport():
 		print(Fore.RED+"No ESP32 device was detected!"+Style.RESET_ALL)
 		print(Fore.RED+"Please plug in a Flipper WiFi devboard or an ESP32 chip and try again"+Style.RESET_ALL)
 		choose_fw()
-	print("Detected serial port:", serialport)
 	if device=='':
 		return
 	elif device=='303A':
 		print(Fore.BLUE+"You are most likely using a Flipper Zero WiFi Devboard or an ESP32-S2"+Style.RESET_ALL)
 	elif device=='10C4':
-		print(Fore.BLUE+"You are most likely using an ESP32-WROOM or an ESP32-S2-WROVER"+Style.RESET_ALL)
+		print(Fore.BLUE+"You are most likely using an ESP32-WROOM, an ESP32-S2-WROVER, or an ESP32-S3-WROOM"+Style.RESET_ALL)
 	elif device=='1A86':
 		print(Fore.MAGENTA+"You are most likely using a knock-off ESP32 chip! Success is not guaranteed!"+Style.RESET_ALL)
 
 	return
 
 def checkforextrabins():
-	extraesp32binsrepo="https://github.com/UberGuidoZ/Marauder_BINs.git"
+	#Temporary change awaiting UberGuidoZ to merge my PR
+	extraesp32binsrepo="https://github.com/SkeletonMan03/Marauder_BINs.git"
 	global extraesp32bins
 	extraesp32bins=("Extra_ESP32_Bins")
 	global scorpbins
@@ -79,8 +79,9 @@ def choose_fw():
 || 2) Save Flipper Blackmagic WiFi settings		||
 || 3) Flash Flipper Blackmagic				||
 || 4) Flash Marauder on ESP32-WROOM			||
-|| 5) Update all files					||
-|| 6) Exit						||
+|| 5) Flash Marauder on ESP32-S3			||
+|| 6) Update all files					||
+|| 7) Exit						||
 \\\======================================================//
 '''
 	global chip
@@ -107,9 +108,14 @@ def choose_fw():
 		checkforserialport()
 		flash_esp32wroom()
 	elif fwchoice==5:
+		print("You have chosen to flash Marauder onto an ESP32-S3")
+		chip="esp32s3"
+		checkforserialport()
+		flash_esp32s3()
+	elif fwchoice==6:
 		print("You have chosen to update all of the files")
 		update_option()
-	elif fwchoice==6:
+	elif fwchoice==7:
 		print("You have chosen to exit")
 		print("Exiting!")
 		exit()
@@ -123,8 +129,6 @@ def erase_esp32fw():
 	print("Erasing firmware...")
 	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'erase_region', '0x9000', '0x6000'])
 	print("Firmware erased!")
-	print("Waiting 5 seconds...")
-	time.sleep(5)
 	return
 
 def checkforesp32marauder():
@@ -146,13 +150,24 @@ def checkforesp32marauder():
 			open('ESP32Marauder/releases/'+filename, 'wb').write(downloadfile.content)
 	esp32marauderfwc=('ESP32Marauder/releases/esp32_marauder_v[0-9]_[0-9]_[0-9][0-9]_*_flipper.bin')
 	if not glob.glob(esp32marauderfwc):
-		print("No ESP32 Marauder firmware exists somehow!")
+		print("No ESP32 Marauder Flipper firmware exists somehow!")
 	global esp32marauderfw
 	for esp32marauderfw in glob.glob(esp32marauderfwc):
 		if os.path.exists(esp32marauderfw):
 			print("ESP32 Marauder firmware exists at", esp32marauderfw)
 	return
 
+def checkfors3bin():
+	esp32s3fwc=('ESP32Marauder/releases/esp32_marauder_v[0-9]_[0-9]_[0-9][0-9]_*_mutliboardS3.bin')
+	if not glob.glob(esp32s3fwc):
+		print("mutliboards3 bin does not exist!")
+	global esp32s3fw
+	for esp32s3fw in glob.glob(esp32s3fwc):
+		if os.path.exists(esp32s3fw):
+			print("ESP32-S3 firmware bin exists at", esp32s3fw)
+		else:
+			print("Somehow, the mutliboardS3.bin file does not exist!")
+	return
 
 def checkforoldhardwarebin():
 	espoldhardwarefwc=('ESP32Marauder/releases/esp32_marauder_v[0-9]_[0-9]_[0-9][0-9]_*_old_hardware.bin')
@@ -170,15 +185,16 @@ def prereqcheck():
 	print("Checking for prerequisites...")
 	checkforextrabins()
 	checkforesp32marauder()
+	checkfors3bin()
 	checkforoldhardwarebin()
 	return
 
 def flash_esp32marauder():
 	global serialport
 	erase_esp32fw()
-	print("Flashing ESP32 Marauder Firmware...")
+	print("Flashing ESP32 Marauder Firmware on a WiFi Devboard or ESP32-S2...")
 	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Marauder/bootloader.bin', '0x8000', extraesp32bins+'/Marauder/partitions.bin', '0x10000', esp32marauderfw])
-	print(Fore.GREEN+"ESP32 has been flashed with Marauder!"+Style.RESET_ALL)
+	print(Fore.GREEN+"ESP32-S2 has been flashed with Marauder!"+Style.RESET_ALL)
 	return
 
 def flash_esp32wroom():
@@ -207,6 +223,14 @@ def flash_flipperbm():
 		erase_esp32fw()
 		esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Blackmagic/bootloader.bin', '0x8000', extraesp32bins+'/Blackmagic/partition-table.bin', '0x10000', extraesp32bins+'/Blackmagic/blackmagic.bin'])
 		print(Fore.GREEN+"Flipper Blackmagic has been flashed without WiFi Settings restored"+Style.RESET_ALL)
+	return
+
+def flash_esp32s3():
+	global serialport
+	erase_esp32fw()
+	print("Flashing ESP32 Marauder Firmware onto ESP32-S3...")
+	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '8MB', '0x0', extraesp32bins+'/S3/bootloader.bin', '0x8000', extraesp32bins+'/S3/partitions.bin', '0xE000', extraesp32bins+'/S3/boot_app0.bin', '0x10000', esp32s3fw])
+	print(Fore.GREEN+"ESP32-S3 has been flashed with Marauder!"+Style.RESET_ALL)
 	return
 
 def update_option():

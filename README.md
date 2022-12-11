@@ -10,11 +10,11 @@ If you are flashing an ESP32 board, you need to install the [driver from here](h
 ## It is now simple to install or update Marauder on Linux, Mac OS X, or Windows.
 # How to use: 
 * Step 0 only has to be ran once
-0) run `pip install -r requirements.txt`. 
-1) Connect the devboard via USB.
+0) run `pip3 install -r requirements.txt`. 
+1) Connect the devboard or ESP32 board via USB.
 2) Press and hold the `BOOT` button on the module, press and release the `RESET` button.
 3) Release the BOOT button. 
-5) run `python EasyInstall.py`. 
+5) run `python3 EasyInstall.py`. 
 6) Select the option of what you want to do
 
 * Important note: You may need to run this script with `sudo` or as Administrator in Windows   
@@ -34,8 +34,9 @@ This script should work on most devices that can run Python 3 and can access ser
 * ESP32-S2 (The ESP chip that is on the WiFi Devboard)  
 * ESP32-S2-WROVER
 * ESP32-WROOM  
+* ESP32-S3
 
-## How to connect an ESP32-WROOM, WROVER, etc to the Flipper Zero
+## How to connect an ESP32-WROOM,WROVER,etc to the Flipper Zero
 ESP32 -> Flipper Zero  
 TX0 -> RX  
 RX0 -> TX  
@@ -43,10 +44,10 @@ GND -> GND
 3v3 -> 3v3  
 
 ## TODO:
+* Code cleanup.  
 * Add more chip compatibility.
 * Fix Windows bug where files cannot be deleted in order to be updated
 * Attempt to accommodate 3rd-party knock-off chips that are not from Espressif
-* Add support for Adafruit Feather ESP32-S3 chips
 
 ## Acknowledgements:
 Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz as this wouldn't exist without the original project
