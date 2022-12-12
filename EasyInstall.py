@@ -57,8 +57,7 @@ def checkforserialport():
 	return
 
 def checkforextrabins():
-	#Temporary change awaiting UberGuidoZ to merge my PR
-	extraesp32binsrepo="https://github.com/SkeletonMan03/Marauder_BINs.git"
+	extraesp32binsrepo="https://github.com/UberGuidoZ/Marauder_BINs.git"
 	global extraesp32bins
 	extraesp32bins=("Extra_ESP32_Bins")
 	global scorpbins
