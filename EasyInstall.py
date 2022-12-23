@@ -149,7 +149,7 @@ def checkforesp32marauder():
 				filename=(marauderasset.rsplit('/', 1)[1])
 			downloadfile=requests.get(marauderasset, allow_redirects=True)
 			open('ESP32Marauder/releases/'+filename, 'wb').write(downloadfile.content)
-	esp32marauderfwc=('ESP32Marauder/releases/esp32_marauder_v[0-9]_[0-9]_[0-9][0-9]_*_flipper.bin')
+	esp32marauderfwc=('ESP32Marauder/releases/esp32_marauder_v*_flipper.bin')
 	if not glob.glob(esp32marauderfwc):
 		print("No ESP32 Marauder Flipper firmware exists somehow!")
 	global esp32marauderfw
@@ -159,7 +159,7 @@ def checkforesp32marauder():
 	return
 
 def checkfors3bin():
-	esp32s3fwc=('ESP32Marauder/releases/esp32_marauder_v[0-9]_[0-9]_[0-9][0-9]_*_mutliboardS3.bin')
+	esp32s3fwc=('ESP32Marauder/releases/esp32_marauder_v*_mutliboardS3.bin')
 	if not glob.glob(esp32s3fwc):
 		print("mutliboards3 bin does not exist!")
 	global esp32s3fw
@@ -171,7 +171,7 @@ def checkfors3bin():
 	return
 
 def checkforoldhardwarebin():
-	espoldhardwarefwc=('ESP32Marauder/releases/esp32_marauder_v[0-9]_[0-9]_[0-9][0-9]_*_old_hardware.bin')
+	espoldhardwarefwc=('ESP32Marauder/releases/esp32_marauder_v*_old_hardware.bin')
 	if not glob.glob(espoldhardwarefwc):
 		print("old_hardware bin does not exist!")
 	global espoldhardwarefw
