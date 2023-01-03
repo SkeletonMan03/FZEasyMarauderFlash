@@ -33,7 +33,7 @@ BR=str("115200")
 def checkforserialport():
 	global serialport
 	serialport=''
-	vids=['303A','10C4','1A86']
+	vids=['303A','10C4','1A86', '0483']
 	com_port=None
 	ports=list(serial.tools.list_ports.comports())
 	for vid in vids:
@@ -53,6 +53,8 @@ def checkforserialport():
 		print(Fore.BLUE+"You are most likely using an ESP32-WROOM, an ESP32-S2-WROVER, or an ESP32-S3-WROOM"+Style.RESET_ALL)
 	elif device=='1A86':
 		print(Fore.MAGENTA+"You are most likely using a knock-off ESP32 chip! Success is not guaranteed!"+Style.RESET_ALL)
+	elif device== '0483':
+		print(Fore.BLUE+"You are most likely using an DrBork Multiboard"+Style.RESET_ALL)
 
 	return
 
