@@ -54,7 +54,7 @@ def checkforserialport():
 	elif device=='1A86':
 		print(Fore.MAGENTA+"You are most likely using a knock-off ESP32 chip! Success is not guaranteed!"+Style.RESET_ALL)
 	elif device== '0483':
-		print(Fore.BLUE+"You are most likely using an DrBork Multiboard"+Style.RESET_ALL)
+		print(Fore.BLUE+"You are most likely using an DrB0rk S3 Multiboard"+Style.RESET_ALL)
 
 	return
 
