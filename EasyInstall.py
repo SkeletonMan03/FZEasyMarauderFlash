@@ -10,6 +10,8 @@ import requests
 import json
 import esptool
 from colorama import Fore, Back, Style
+from pathlib import Path
+import stat
 
 OPENASCII=Fore.GREEN+'''
 #########################################
@@ -61,7 +63,7 @@ def checkforserialport():
 def checkforextrabins():
 	extraesp32binsrepo="https://github.com/UberGuidoZ/Marauder_BINs.git"
 	global extraesp32bins
-	extraesp32bins=("Extra_ESP32_Bins")
+	extraesp32bins=("Extra_ESP32_Bins/Marauder")
 	global scorpbins
 	scorpbins=(extraesp32bins+"/Marauder/WROOM")
 	if os.path.exists(extraesp32bins):
@@ -238,12 +240,33 @@ def flash_esp32s3():
 
 def update_option():
 	print("Checking for and deleting the files before replacing them...")
-	if os.path.exists("ESP32Marauder"):
-		shutil.rmtree("ESP32Marauder")
-	if os.path.exists("Extra_ESP32_Bins"):
-		shutil.rmtree("Extra_ESP32_Bins")
+	cwd = os.getcwd()
+	for paths in Path(cwd).rglob('ESP32Marauder//*//*'):
+		os.remove(paths)
+	os.rmdir('ESP32Marauder//releases')
+	os.rmdir('ESP32Marauder')
+	for paths in Path(cwd).rglob('Extra_ESP32_Bins//**/*'):
+		if os.path.isfile(paths):
+			try:
+				os.remove(paths)
+			except OSError:
+				pass
+	try:
+		shutil.rmtree('Extra_ESP32_Bins//Blackmagic', onerror = redo_with_write)
+		shutil.rmtree('Extra_ESP32_Bins//Marauder//WROOM', onerror = redo_with_write)
+		shutil.rmtree('Extra_ESP32_Bins//Marauder', onerror = redo_with_write)
+		shutil.rmtree('Extra_ESP32_Bins//S3', onerror = redo_with_write)
+		shutil.rmtree('Extra_ESP32_Bins', onerror = redo_with_write)
+	except OSError:
+		pass
 	prereqcheck()
+	choose_fw()
 	return
+
+def redo_with_write(redo_func, path, err):
+	os.chmod(path, stat.S_IWRITE)
+	os.unlink(path)
+	redo_func(path)
 
 prereqcheck()
 choose_fw()
