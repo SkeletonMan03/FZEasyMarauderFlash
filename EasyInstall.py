@@ -241,9 +241,9 @@ def flash_esp32s3():
 def update_option():
 	print("Checking for and deleting the files before replacing them...")
 	cwd = os.getcwd()
-	for paths in Path(cwd).rglob('ESP32Marauder\\*\\*'):
+	for paths in Path(cwd).rglob('ESP32Marauder/*/*'):
 		os.remove(paths)
-	os.rmdir('ESP32Marauder\\releases')
+	os.rmdir('ESP32Marauder/releases')
 	os.rmdir('ESP32Marauder')
 	cwd = os.getcwd()
 	extrarepo = os.path.join(cwd, "Extra_ESP32_Bins")
