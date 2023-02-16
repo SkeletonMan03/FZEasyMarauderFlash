@@ -245,7 +245,6 @@ def update_option():
 		os.remove(paths)
 	os.rmdir('ESP32Marauder/releases')
 	os.rmdir('ESP32Marauder')
-	cwd = os.getcwd()
 	extrarepo = os.path.join(cwd, "Extra_ESP32_Bins")
 	repo = Repo(extrarepo)
 	repo.git.reset('--hard')
