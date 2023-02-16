@@ -46,7 +46,6 @@ GND -> GND
 ## TODO:
 * Code cleanup.  
 * Add more chip compatibility.
-* Fix Windows bug where files cannot be deleted in order to be updated
 * Attempt to accommodate 3rd-party knock-off chips that are not from Espressif
 
 ## Acknowledgements:
@@ -64,3 +63,4 @@ Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz
 * [jacklythgoee](https://github.com/jacklythgoee) For getting a knockoff ESP32-WROOM and giving me info to be able to try to detect it so it could be flashed. 
 * [Der Skythe](https://github.com/derskythe) For fixing extra quotes I added without noticing and his awesome work on Flipper Zero Firmware
 * [seeker7r4c3r](https://github.com/seeker7r4c3r) For adding the VID of the DrB0rk S3 Multiboard
+* [aafksab](https://github.com/aafksab) For fixing the Windows bug with the update option that was confusing me
