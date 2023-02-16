@@ -10,6 +10,8 @@ import requests
 import json
 import esptool
 from colorama import Fore, Back, Style
+from pathlib import Path
+import git
 
 OPENASCII=Fore.GREEN+'''
 #########################################
@@ -238,11 +240,18 @@ def flash_esp32s3():
 
 def update_option():
 	print("Checking for and deleting the files before replacing them...")
-	if os.path.exists("ESP32Marauder"):
-		shutil.rmtree("ESP32Marauder")
-	if os.path.exists("Extra_ESP32_Bins"):
-		shutil.rmtree("Extra_ESP32_Bins")
+	cwd = os.getcwd()
+	for paths in Path(cwd).rglob('ESP32Marauder/*/*'):
+		os.remove(paths)
+	os.rmdir('ESP32Marauder/releases')
+	os.rmdir('ESP32Marauder')
+	extrarepo = os.path.join(cwd, "Extra_ESP32_Bins")
+	repo = Repo(extrarepo)
+	repo.git.reset('--hard')
+	repo.git.clean('-xdf')
+	repo.remotes.origin.pull()
 	prereqcheck()
+	choose_fw()
 	return
 
 prereqcheck()
