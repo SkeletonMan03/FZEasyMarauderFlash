@@ -17,7 +17,7 @@ OPENASCII=Fore.GREEN+'''
 #########################################
 #    Marauder Flasher Script		#
 #    Python edition by SkeletonMan	#
-#    based off of a Windows based	#
+#    based off of a Windows Batch	#
 #    script by Frog, UberGuidoz,	#
 #    and ImprovingRigamarole		#
 #					#
@@ -79,12 +79,14 @@ def choose_fw():
 //======================================================\\\ 
 || Options:						||
 || 1) Flash Marauder on WiFi Devboard or ESP32-S2	||
-|| 2) Save Flipper Blackmagic WiFi settings		||
-|| 3) Flash Flipper Blackmagic				||
-|| 4) Flash Marauder on ESP32-WROOM			||
-|| 5) Flash Marauder on ESP32-S3			||
-|| 6) Update all files					||
-|| 7) Exit						||
+|| 2) Flash SD Serial Marauder on Devboard or ESP32-S2	||
+|| 3) Save Flipper Blackmagic WiFi settings		||
+|| 4) Flash Flipper Blackmagic				||
+|| 5) Flash Marauder on ESP32-WROOM			||
+|| 6) Flash Marauder on ESP32 Wemos D1 Mini		||
+|| 7) Flash Marauder on ESP32-S3			||
+|| 8) Update all files					||
+|| 9) Exit						||
 \\\======================================================//
 '''
 	global chip
@@ -95,30 +97,40 @@ def choose_fw():
 		chip="esp32s2"
 		checkforserialport()
 		flash_esp32marauder()
-	elif fwchoice==2:
+	if fwchoice==2:
+		print("You have chosen to flash Marauder on a WiFi devboard or ESP32-S2 with support for SD Serial Support")
+		chip="esp32s2"
+		checkforserialport()
+		flash_esp32marauderserial()
+	elif fwchoice==3:
 		print("You have chosen to save Flipper Blackmagic WiFi settings")
 		chip="esp32s2"
 		checkforserialport()
 		save_flipperbmsettings()
-	elif fwchoice==3:
+	elif fwchoice==4:
 		print("You have chosen to flash Flipper Blackmagic")
 		chip="esp32s2"
 		checkforserialport()
 		flash_flipperbm()
-	elif fwchoice==4:
+	elif fwchoice==5:
 		print("You have chosen to flash Marauder onto an ESP32-WROOM")
 		chip="esp32"
 		checkforserialport()
 		flash_esp32wroom()
-	elif fwchoice==5:
+	elif fwchoice==6:
+		print("You have chosen to flash Marauder onto an ESP32 Wemos D1 Mini")
+		chip="esp32"
+		checkforserialport()
+		flash_esp32wroommini()
+	elif fwchoice==7:
 		print("You have chosen to flash Marauder onto an ESP32-S3")
 		chip="esp32s3"
 		checkforserialport()
 		flash_esp32s3()
-	elif fwchoice==6:
+	elif fwchoice==8:
 		print("You have chosen to update all of the files")
 		update_option()
-	elif fwchoice==7:
+	elif fwchoice==9:
 		print("You have chosen to exit")
 		print("Exiting!")
 		exit()
@@ -162,6 +174,16 @@ def checkforesp32marauder():
 			print("ESP32 Marauder firmware exists at", esp32marauderfw)
 	return
 
+def checkforesp32marauderserial():
+	esp32marauderfwserialc=('ESP32Marauder/releases/esp32_marauder_v*_flipper_sd_serial.bin')
+	if not glob.glob(esp32marauderfwserialc):
+		print("No ESP32 Marauder Flipper SD Serial firmware exists somehow!")
+	global esp32marauderfwserial
+	for esp32marauderfwserial in glob.glob(esp32marauderfwserialc):
+		if os.path.exists(esp32marauderfwserial):
+			print("ESP32 Marauder firmware exists at", esp32marauderfwserial)
+	return
+
 def checkfors3bin():
 	esp32s3fwc=('ESP32Marauder/releases/esp32_marauder_v*_mutliboardS3.bin')
 	if not glob.glob(esp32s3fwc):
@@ -186,12 +208,26 @@ def checkforoldhardwarebin():
 			print("Somehow, the old_hardware.bin file does not exist!")
 	return
 
+def checkforminibin():
+	espd1minifwc=('ESP32Marauder/releases/esp32_marauder_v*_mini.bin')
+	if not glob.glob(espd1minifwc):
+		print("mini bin does not exist!")
+	global espd1minifw
+	for espd1minifw in glob.glob(espd1minifwc):
+		if os.path.exists(espd1minifw):
+			print("Mini bin exists at", espd1minifw)
+		else:
+			print("Somehow, the mini bin does not exist!")
+	return
+
 def prereqcheck():
 	print("Checking for prerequisites...")
 	checkforextrabins()
 	checkforesp32marauder()
+	checkforesp32marauderserial()
 	checkfors3bin()
 	checkforoldhardwarebin()
+	checkforminibin()
 	return
 
 def flash_esp32marauder():
@@ -202,12 +238,26 @@ def flash_esp32marauder():
 	print(Fore.GREEN+"ESP32-S2 has been flashed with Marauder!"+Style.RESET_ALL)
 	return
 
+def flash_esp32marauderserial():
+	global serialport
+	erase_esp32fw()
+	print("Flashing ESP32 Marauder Firmware with SD Serial support on a WiFi Devboard or ESP32-S2...")
+	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Marauder/bootloader.bin', '0x8000', extraesp32bins+'/Marauder/partitions.bin', '0x10000', esp32marauderfwserial])
+	print(Fore.GREEN+"ESP32-S2 has been flashed with Marauder with SD serial support!"+Style.RESET_ALL)
+	return
+
 def flash_esp32wroom():
 	global serialport
 	print("Flashing ESP32 Marauder Firmware onto ESP32-WROOM...")
 	erase_esp32fw()
 	esptool.main(['-p', serialport, '-b', BR, '--before', 'default_reset', '--after', 'hard_reset', '-c', chip, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '2MB', '0x8000', scorpbins+'/partitions.bin', '0x1000', scorpbins+'/bootloader.bin', '0x10000', espoldhardwarefw])
 	print(Fore.GREEN+"ESP32-WROOM has been flashed with Marauder!"+Style.RESET_ALL)
+	return
+def flash_esp32wroommini():
+	print("Flashing ESP32 Marauder Firmware onto ESP32-WROOM D1 Mini...")
+	erase_esp32fw()
+	esptool.main(['-p', serialport, '-b', BR, '--before', 'default_reset', '--after', 'hard_reset', '-c', chip, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '2MB', '0x8000', scorpbins+'/partitions.bin', '0x1000', scorpbins+'/bootloader.bin', '0x10000', espd1minifw])
+	print(Fore.GREEN+"ESP32-WROOM D1 Mini has been flashed with Marauder!"+Style.RESET_ALL)
 	return
 
 def save_flipperbmsettings():

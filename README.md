@@ -26,17 +26,18 @@ You can find it [here in UberGuidoZ's repo](https://github.com/UberGuidoZ/Flippe
 ## About this script
 This script pulls all of its resources from the proper Github repositories in order to make sure you are up-to-date.  
 The only dependencies it does not get by itself are the required Python modules and Windows tools.  
-This script is now capable of flashing Marauder onto an ESP32-WROOM, ESP32-S2-WROVER, and some knock-off boards.  
 This script should work on most devices that can run Python 3 and can access serial ports via USB.  
+Thanks to Marauder update v0.10.2 and [Marauder Companion Flipper Zero app](https://github.com/tcpassos/flipperzero-firmware-with-wifi-marauder-companion/releases) fork/update by [tcpassos](https://github.com/tcpassos) PCAPs can now be directly saved to your Flipper Zero's SD Card directly!
 
 ## Compatible boards
 * Flipper Zero WiFi Devboard  
-* ESP32-S2 (The ESP chip that is on the WiFi Devboard)  
+* ESP32-S2 (The ESP32 chip that is on the WiFi Devboard)  
 * ESP32-S2-WROVER
-* ESP32-WROOM  
-* ESP32-S3
+* ESP32-WROOM
+* ESP32-WROOM D1 Mini 
+* ESP32-S3 
 
-## How to connect an ESP32-WROOM,WROVER,etc to the Flipper Zero
+## How to connect an ESP32-WROOM, WROVER, etc to the Flipper Zero
 ESP32 -> Flipper Zero  
 TX0 -> RX  
 RX0 -> TX  
