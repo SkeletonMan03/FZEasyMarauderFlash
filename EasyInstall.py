@@ -98,7 +98,7 @@ def choose_fw():
 		checkforserialport()
 		flash_esp32marauder()
 	if fwchoice==2:
-		print("You have chosen to flash Marauder on a WiFi devboard or ESP32-S2 with support for SD Serial Support")
+		print("You have chosen to flash Marauder on a WiFi devboard or ESP32-S2 with SD Serial Support")
 		chip="esp32s2"
 		checkforserialport()
 		flash_esp32marauderserial()
@@ -144,8 +144,8 @@ def erase_esp32fw():
 	print("Erasing firmware...")
 	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'erase_region', '0x9000', '0x6000'])
 	print("Firmware erased!")
-	print("Waiting 10 seconds...")
-	time.sleep(10)
+	print("Waiting 5 seconds...")
+	time.sleep(5)
 	return
 
 def checkforesp32marauder():
