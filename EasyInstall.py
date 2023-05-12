@@ -40,8 +40,6 @@ BR=str("115200")
 
 def checkforserialport():
 	global serialport
-		
-
 	if serialport!='':
 		print("Will not check for serial port or possible chip type since it is specified as", serialport)
 		return
@@ -163,14 +161,14 @@ def erase_esp32fw():
 			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'erase_region', '0x9000', '0x6000'])
 		except Exception as err:
 			print(err)
-			if attempts==3: 
+			if attempts==3:
 				print("Unable to erase the firmware on", chip)
 				exit()
 			print("Waiting 5 seconds and trying again...")
 			time.sleep(5)
 			continue
-			print(chip, "was successfully erased!")
-			break
+		print(chip, "was successfully erased!")
+		break
 	print("Waiting 5 seconds...")
 	time.sleep(5)	
 	return
@@ -260,59 +258,173 @@ def prereqcheck():
 def flash_esp32marauder():
 	global serialport
 	erase_esp32fw()
-	print("Flashing ESP32 Marauder Firmware on a WiFi Devboard or ESP32-S2...")
-	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Marauder/bootloader.bin', '0x8000', extraesp32bins+'/Marauder/partitions.bin', '0x10000', esp32marauderfw])
-	print(Fore.GREEN+"ESP32-S2 has been flashed with Marauder!"+Style.RESET_ALL)
+	tries=3
+	attempts=0
+	for i in range(tries):
+		try:
+			attempts+=1
+			print("Flashing ESP32 Marauder Firmware on a WiFi Devboard or ESP32-S2...")
+			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Marauder/bootloader.bin', '0x8000', extraesp32bins+'/Marauder/partitions.bin', '0x10000', esp32marauderfw])
+		except Exception as err:
+			print(err)
+			if attempts==3:
+				print("Could not flash firmware on ESP32-S2")
+				exit()
+			print("Waiting 5 seconds and trying again...")
+			time.sleep(5)
+			continue
+		print(Fore.GREEN+"ESP32-S2 has been flashed with Marauder!"+Style.RESET_ALL)
+		break
 	return
 
 def flash_esp32marauderserial():
 	global serialport
 	erase_esp32fw()
-	print("Flashing ESP32 Marauder Firmware with SD Serial support on a WiFi Devboard or ESP32-S2...")
-	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Marauder/bootloader.bin', '0x8000', extraesp32bins+'/Marauder/partitions.bin', '0x10000', esp32marauderfwserial])
-	print(Fore.GREEN+"ESP32-S2 has been flashed with Marauder with SD serial support!"+Style.RESET_ALL)
+	tries=3
+	attempts=0
+	for i in range(tries):
+		try:
+			attempts+=1
+			print("Flashing ESP32 Marauder Firmware with SD Serial support on a WiFi Devboard or ESP32-S2...")
+			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Marauder/bootloader.bin', '0x8000', extraesp32bins+'/Marauder/partitions.bin', '0x10000', esp32marauderfwserial])
+		except Exception as err:
+			print(err)
+			if attempts==3:
+				print("Could not flash Marauder firmware on ESP32-S2")
+				exit()
+			print("Waiting 5 seconds and trying again...")
+			time.sleep(5)
+			continue
+		print(Fore.GREEN+"ESP32-S2 has been flashed with Marauder with SD serial support!"+Style.RESET_ALL)
+		break
 	return
 
 def flash_esp32wroom():
 	global serialport
-	print("Flashing ESP32 Marauder Firmware onto ESP32-WROOM...")
 	erase_esp32fw()
-	esptool.main(['-p', serialport, '-b', BR, '--before', 'default_reset', '--after', 'hard_reset', '-c', chip, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '2MB', '0x8000', scorpbins+'/partitions.bin', '0x1000', scorpbins+'/bootloader.bin', '0x10000', espoldhardwarefw])
-	print(Fore.GREEN+"ESP32-WROOM has been flashed with Marauder!"+Style.RESET_ALL)
+	tries=3
+	attempts=0
+	for i in range(tries):
+		try:
+			attempts+=1
+			print("Flashing ESP32 Marauder Firmware onto ESP32-WROOM...")
+			esptool.main(['-p', serialport, '-b', BR, '--before', 'default_reset', '--after', 'hard_reset', '-c', chip, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '2MB', '0x8000', scorpbins+'/partitions.bin', '0x1000', scorpbins+'/bootloader.bin', '0x10000', espoldhardwarefw])
+		except Exception as err:
+			print(err)
+			if attempts==3:
+				print("Could not flash Marauder firmware on ESP32-WROOM")
+				exit()
+			print("Waiting 5 seconds and trying again...")
+			time.sleep(5)
+			continue
+		print(Fore.GREEN+"ESP32-WROOM has been flashed with Marauder!"+Style.RESET_ALL)
+		break
 	return
+
 def flash_esp32wroommini():
-	print("Flashing ESP32 Marauder Firmware onto ESP32-WROOM D1 Mini...")
 	erase_esp32fw()
-	esptool.main(['-p', serialport, '-b', BR, '--before', 'default_reset', '--after', 'hard_reset', '-c', chip, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '2MB', '0x8000', scorpbins+'/partitions.bin', '0x1000', scorpbins+'/bootloader.bin', '0x10000', espd1minifw])
-	print(Fore.GREEN+"ESP32-WROOM D1 Mini has been flashed with Marauder!"+Style.RESET_ALL)
+	tries=3
+	attempts=0
+	for i in range(tries):
+		try:
+			attempts +=1
+			print("Flashing ESP32 Marauder Firmware onto ESP32-WROOM D1 Mini...")
+			esptool.main(['-p', serialport, '-b', BR, '--before', 'default_reset', '--after', 'hard_reset', '-c', chip, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '2MB', '0x8000', scorpbins+'/partitions.bin', '0x1000', scorpbins+'/bootloader.bin', '0x10000', espd1minifw])
+		except Exception as err:
+			print(err)
+			if attempts==3:
+				print("Could not flash Marauder firmware on ESP32-WROOM D1 Mini")
+				exit()
+			print("Waiting 5 seconds and trying again...")
+			time.sleep(5)
+			continue
+		print(Fore.GREEN+"ESP32-WROOM D1 Mini has been flashed with Marauder!"+Style.RESET_ALL)
+		break
 	return
 
 def save_flipperbmsettings():
 	global serialport
-	print("Saving Flipper Blackmagic WiFi Settings to Extra_ESP32_Bins/Blackmagic/nvs.bin")
-	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '-a', 'no_reset', 'read_flash', '0x9000', '0x6000', extraesp32bins+'/Blackmagic/nvs.bin'])
-	print(Fore.GREEN+"Flipper Blackmagic Wifi Settings have been saved to ", extraesp32bins+"/Blackmagic/nvs.bin!"+Style.RESET_ALL)
+	tries=3
+	attempts=0
+	for i in range(tries):
+		try:
+			attempts +=1
+			print("Saving Flipper Blackmagic WiFi Settings to Extra_ESP32_Bins/Blackmagic/nvs.bin")
+			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '-a', 'no_reset', 'read_flash', '0x9000', '0x6000', extraesp32bins+'/Blackmagic/nvs.bin'])
+		except Exception as err:
+			print(err)
+			if attempts==3:
+				print("Could not save Flipper Blackmagic WiFi Settings")
+				exit()
+			print("Waiting 5 seconds and trying again...")
+			time.sleep(5)
+			continue
+		print(Fore.GREEN+"Flipper Blackmagic Wifi Settings have been saved to ", extraesp32bins+"/Blackmagic/nvs.bin!"+Style.RESET_ALL)
+		break
 	return
 
 def flash_flipperbm():
 	if os.path.exists(extraesp32bins+"/Blackmagic/nvs.bin"):
-		print("Flashing Flipper Blackmagic with WiFi Settings restore")
 		erase_esp32fw()
-		esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Blackmagic/bootloader.bin', '0x8000', extraesp32bins+'/Blackmagic/partition-table.bin', '0x9000', extraesp32bins+'/Blackmagic/nvs.bin', '0x10000', extraesp32bins+'/Blackmagic/blackmagic.bin'])
-		print(Fore.GREEN+"Flipper Blackmagic has been flashed with the WiFi Settings restored"+Style.RESET_ALL)
+		tries=3
+		attempts=0
+		for i in range(tries):
+			try:
+				attempts +=1
+				print("Flashing Flipper Blackmagic with WiFi Settings restore")
+				esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Blackmagic/bootloader.bin', '0x8000', extraesp32bins+'/Blackmagic/partition-table.bin', '0x9000', extraesp32bins+'/Blackmagic/nvs.bin', '0x10000', extraesp32bins+'/Blackmagic/blackmagic.bin'])
+			except Exception as err:
+				print(err)
+				if attempts==3:
+					print("Could not flash Blackmagic with WiFi Settings")
+					exit()
+				print("Waiting 5 seconds and trying again...")
+				time.sleep(5)
+				continue
+			print(Fore.GREEN+"Flipper Blackmagic has been flashed with the WiFi Settings restored"+Style.RESET_ALL)
+			break
 	else:
-		print("Flashing Flipper Blackmagic without WiFi Settings restore")
+
 		erase_esp32fw()
-		esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Blackmagic/bootloader.bin', '0x8000', extraesp32bins+'/Blackmagic/partition-table.bin', '0x10000', extraesp32bins+'/Blackmagic/blackmagic.bin'])
-		print(Fore.GREEN+"Flipper Blackmagic has been flashed without WiFi Settings restored"+Style.RESET_ALL)
+		tries=3
+		attempts=0
+		for i in range(tries):
+			try:
+				attempts +=1
+				print("Flashing Flipper Blackmagic without WiFi Settings restore")
+				esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Blackmagic/bootloader.bin', '0x8000', extraesp32bins+'/Blackmagic/partition-table.bin', '0x10000', extraesp32bins+'/Blackmagic/blackmagic.bin'])
+			except Exception as err:
+				print(err)
+				if attempts==3:
+					print("Could not flash Blackmagic")
+					exit()
+				print("Waiting 5 seconds and trying again...")
+				time.sleep(5)
+				continue
+			print(Fore.GREEN+"Flipper Blackmagic has been flashed without WiFi Settings restored"+Style.RESET_ALL)
+			break
 	return
 
 def flash_esp32s3():
 	global serialport
 	erase_esp32fw()
-	print("Flashing ESP32 Marauder Firmware onto ESP32-S3...")
-	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '8MB', '0x0', extraesp32bins+'/S3/bootloader.bin', '0x8000', extraesp32bins+'/S3/partitions.bin', '0xE000', extraesp32bins+'/S3/boot_app0.bin', '0x10000', esp32s3fw])
-	print(Fore.GREEN+"ESP32-S3 has been flashed with Marauder!"+Style.RESET_ALL)
+	tries=3
+	attempts=0
+	for i in range(tries):
+		try:
+			attempts +=1
+			print("Flashing ESP32 Marauder Firmware onto ESP32-S3...")
+			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '8MB', '0x0', extraesp32bins+'/S3/bootloader.bin', '0x8000', extraesp32bins+'/S3/partitions.bin', '0xE000', extraesp32bins+'/S3/boot_app0.bin', '0x10000', esp32s3fw])
+		except Exception as err:
+			print(err)
+			if attempts==3:
+				print("Could not flash Marauder firmware on ESP32-S3")
+				exit()
+			print("Waiting 5 seconds and trying again...")
+			time.sleep(5)
+			continue
+		print(Fore.GREEN+"ESP32-S3 has been flashed with Marauder!"+Style.RESET_ALL)
+		break
 	return
 
 def update_option():

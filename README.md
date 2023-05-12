@@ -12,9 +12,9 @@ If you are flashing an ESP32 board, you need to install the [driver from here](h
 * Step 0 only has to be ran once. (That doesn't mean it's okay to skip it unless you're running it again after having just used it)
 0) run `pip3 install -r requirements.txt`. 
 1) Press and hold the `BOOT` button on the module
-2) Connect the devboard or ESP32 board via USB.
+2) While still holding `BOOT`, connect the devboard or ESP32 board via USB.
 3) Press and release the `RESET` button.
-4) Release the BOOT button. 
+4) Release the `BOOT` button. 
 5) run `python3 EasyInstall.py`. 
 6) Select the option of what you want to do
 
@@ -51,6 +51,7 @@ There are now optional parameters
 * `-s` or `--serialport` <Serial Port>
 For example, if you have a device you know is on `/dev/ttyUSB0`, you could specify it with `python3 EasyInstall.py -s /dev/ttyUSB0` 
 * Using this option will skip automatic detection of the serial port and will not try to identify the device
+* By using this option, you accept full responsibility in the event that you brick your device and understand that I can't help you fix it
 
 ## Issues with flashing?
 Here are some steps to try:  
@@ -59,6 +60,7 @@ Here are some steps to try:
 * Try a different cable
 * Try a different USB port
 * Check your permissions. On Linux, you may have to change ownership of the serial port, for example, /dev/ttyUSB0 is typically owned by root, so you may need to run something like `chown user:group /dev/ttyUSB0`
+* If you're using Windows, don't use Git Bash, it doesn't work well with this script. Instead, use Powershell, Windows Terminal, or even CMD
 
 ## TODO:
 * Code cleanup.  
