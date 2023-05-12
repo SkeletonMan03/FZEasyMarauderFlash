@@ -20,18 +20,14 @@ args=parser.parse_args()
 serialport=args.serialport
 
 OPENASCII=Fore.GREEN+'''
-#########################################
-#    Marauder Flasher Script		#
-#    Python edition by SkeletonMan	#
-#    based off of a Windows Batch	#
-#    script by Frog, UberGuidoz,	#
-#    and ImprovingRigamarole		#
-#					#
-#    Thanks to everyone who has done	#
-#    testing on various chips for me	#
-#    Thanks to Scorp for compiling	#
-#    needed bins for the ESP32-WROOM	#
-#########################################
+#########################################################################
+#    Marauder Flasher Script						#
+#    Python edition by SkeletonMan based off of a Windows Batch		#
+#    script by Frog, UberGuidoz, and ImprovingRigamarole		#
+#									#
+#    Thanks to everyone who has done testing on various chips for me	#
+#    Thanks to Scorp for compiling needed bins for the ESP32-WROOM	#
+#########################################################################
 '''+Style.RESET_ALL
 
 print(OPENASCII)
