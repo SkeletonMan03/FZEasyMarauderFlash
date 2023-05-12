@@ -9,11 +9,12 @@ If you are flashing an ESP32 board, you need to install the [driver from here](h
 
 ## It is now simple to install or update Marauder on Linux, Mac OS X, or Windows.
 # How to use: 
-* Step 0 only has to be ran once
+* Step 0 only has to be ran once. (That doesn't mean it's okay to skip it unless you're running it again after having just used it)
 0) run `pip3 install -r requirements.txt`. 
-1) Connect the devboard or ESP32 board via USB.
-2) Press and hold the `BOOT` button on the module, press and release the `RESET` button.
-3) Release the BOOT button. 
+1) Press and hold the `BOOT` button on the module
+2) Connect the devboard or ESP32 board via USB.
+3) Press and release the `RESET` button.
+4) Release the BOOT button. 
 5) run `python3 EasyInstall.py`. 
 6) Select the option of what you want to do
 
@@ -44,10 +45,25 @@ RX0 -> TX
 GND -> GND  
 3v3 -> 3v3  
 
+## Optional parameters
+There are now optional parameters
+* `-h` or `--help` - Show help
+* `-s` or `--serialport` <Serial Port>
+For example, if you have a device you know is on `/dev/ttyUSB0`, you could specify it with `python3 EasyInstall.py -s /dev/ttyUSB0` 
+* Using this option will skip automatic detection of the serial port and will not try to identify the device
+
+## Issues with flashing?
+Here are some steps to try:  
+* Ensure you have followed the steps above and installed any necessary prerequisites
+* Check that your computer can see the device. In Linux, run `lsusb`, on Mac run `system_profiler SPUSBDataType`, on Windows, open your Device Manager and look for it
+* Try a different cable
+* Try a different USB port
+* Check your permissions. On Linux, you may have to change ownership of the serial port, for example, /dev/ttyUSB0 is typically owned by root, so you may need to run something like `chown user:group /dev/ttyUSB0`
+
 ## TODO:
 * Code cleanup.  
 * Add more chip compatibility.
-* Attempt to accommodate 3rd-party knock-off chips that are not from Espressif
+* Attempt to accommodate more boards that can be used with Marauder
 
 ## Acknowledgements:
 Disclaimer: Includes Acknowledgements from the above linked repo from UberGuidoz as this wouldn't exist without the original project

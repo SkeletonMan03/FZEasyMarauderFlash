@@ -12,6 +12,12 @@ import esptool
 from colorama import Fore, Back, Style
 from pathlib import Path
 import git
+import argparse
+
+parser=argparse.ArgumentParser()
+parser.add_argument('-s', '--serialport', type=str, help="Define serial port", default='')
+args=parser.parse_args()
+serialport=args.serialport
 
 OPENASCII=Fore.GREEN+'''
 #########################################
@@ -34,7 +40,14 @@ BR=str("115200")
 
 def checkforserialport():
 	global serialport
-	serialport=''
+		
+
+	if serialport!='':
+		print("Will not check for serial port or possible chip type since it is specified as", serialport)
+		return
+	else:
+		serialport=''
+	print("Checking for serial port...")
 	vids=['303A','10C4','1A86', '0483']
 	com_port=None
 	ports=list(serial.tools.list_ports.comports())
@@ -141,11 +154,25 @@ def choose_fw():
 
 def erase_esp32fw():
 	global serialport
-	print("Erasing firmware...")
-	esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'erase_region', '0x9000', '0x6000'])
-	print("Firmware erased!")
+	tries=3
+	attempts=0
+	for i in range(tries):
+		try:
+			attempts+=1
+			print("Erasing firmware...")
+			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'erase_region', '0x9000', '0x6000'])
+		except Exception as err:
+			print(err)
+			if attempts==3: 
+				print("Unable to erase the firmware on", chip)
+				exit()
+			print("Waiting 5 seconds and trying again...")
+			time.sleep(5)
+			continue
+			print(chip, "was successfully erased!")
+			break
 	print("Waiting 5 seconds...")
-	time.sleep(5)
+	time.sleep(5)	
 	return
 
 def checkforesp32marauder():

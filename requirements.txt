@@ -5,3 +5,4 @@ requests
 --only-binary :all: --extra-index-url https://dl.espressif.com/pypi/ reedsolo
 esptool
 colorama
+argparse
