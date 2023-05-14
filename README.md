@@ -61,6 +61,8 @@ Here are some steps to try:
 * Try a different USB port
 * Check your permissions. On Linux, you may have to change ownership of the serial port, for example, /dev/ttyUSB0 is typically owned by root, so you may need to run something like `chown user:group /dev/ttyUSB0`
 * If you're using Windows, don't use Git Bash, it doesn't work well with this script. Instead, use Powershell, Windows Terminal, or even CMD
+* On Windows and Python is acting strange? Uninstall it then re-install it via the Microsoft Store.
+* Make sure you're running the latest Python release! If you're on 3.8 when current is 3.11.3 for example, don't bother opening an issue, just upgrade. Don't try to use old stuff.
 
 ## TODO:
 * Code cleanup.  
