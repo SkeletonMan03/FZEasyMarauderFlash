@@ -206,7 +206,7 @@ def checkforesp32marauderserial():
 	return
 
 def checkfors3bin():
-	esp32s3fwc=('ESP32Marauder/releases/esp32_marauder_v*_mutliboardS3.bin')
+	esp32s3fwc=('ESP32Marauder/releases/esp32_marauder_v*_multiboardS3.bin')
 	if not glob.glob(esp32s3fwc):
 		print("mutliboards3 bin does not exist!")
 	global esp32s3fw
