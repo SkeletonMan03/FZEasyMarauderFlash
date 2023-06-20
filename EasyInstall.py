@@ -104,7 +104,7 @@ def choose_fw():
 		chip="esp32s2"
 		checkforserialport()
 		flash_esp32marauder()
-	if fwchoice==2:
+	elif fwchoice==2:
 		print("You have chosen to flash Marauder on a WiFi devboard or ESP32-S2 with SD Serial Support")
 		chip="esp32s2"
 		checkforserialport()
