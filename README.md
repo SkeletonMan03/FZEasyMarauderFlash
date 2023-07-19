@@ -28,7 +28,7 @@ You can find it [here in UberGuidoZ's repo](https://github.com/UberGuidoZ/Flippe
 This script pulls all of its resources from the proper Github repositories in order to make sure you are up-to-date.  
 The only dependencies it does not get by itself are the required Python modules and Windows tools.  
 This script should work on most devices that can run Python 3 and can access serial ports via USB.  
-Thanks to Marauder update v0.10.2 and [Marauder Companion Flipper Zero app](https://github.com/0xchocolate/flipperzero-firmware-with-wifi-marauder-companion/releases) fork/update from [tcpassos](https://github.com/tcpassos) PCAPs can now be directly saved to your Flipper Zero's SD Card directly!
+Thanks to Marauder update v0.10.2 and [Marauder Companion Flipper Zero app](https://github.com/0xchocolate/flipperzero-firmware-with-wifi-marauder-companion/releases) fork/update from [tcpassos](https://github.com/tcpassos) PCAPs can now be directly saved to your Flipper Zero's SD Card!
 
 ## Compatible boards
 * Flipper Zero WiFi Devboard  
