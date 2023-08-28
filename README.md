@@ -19,6 +19,7 @@ If you are flashing an ESP32 board, you need to install the [driver from here](h
 6) Select the option of what you want to do
 
 * Important note: You may need to run this script with `sudo` or as Administrator in Windows   
+* Step 1-4 not necessary on AWOK boards
 
 ## This project is based on the Windows Marauder flasher batch script
 
@@ -37,6 +38,7 @@ Thanks to Marauder update v0.10.2 and [Marauder Companion Flipper Zero app](http
 * ESP32-WROOM
 * ESP32-WROOM D1 Mini 
 * ESP32-S3 
+* All AWOK ESP32 Boards
 
 ## How to connect an ESP32-WROOM, WROVER, etc to the Flipper Zero
 ESP32 -> Flipper Zero  
