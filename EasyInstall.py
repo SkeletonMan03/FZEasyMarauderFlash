@@ -277,7 +277,7 @@ def checkforminibin():
 			print("Somehow, the mini bin does not exist!")
 	return
 
-def checkforminibin(): #added mini path for awok 
+def checkforminibin(): #added mini path for AWOK as "espminifw" 
 	espminifwc=('ESP32Marauder/releases/esp32_marauder_v*_mini.bin')
 	if not glob.glob(espminifwc):
 		print("mini bin does not exist!")
@@ -442,7 +442,7 @@ def flash_flipperbm():
 			break
 		return
 	
-def flash_esp32awoktouchscreen(): #added AWOK boards here
+def flash_esp32awoktouchscreen(): #added AWOK board options here
 	global serialport
 	erase_esp32fw()
 	tries=3
