@@ -20,14 +20,15 @@ args=parser.parse_args()
 serialport=args.serialport
 
 OPENASCII=Fore.GREEN+'''
-#########################################################################
-#    Marauder Flasher Script						#
-#    Python edition by SkeletonMan based off of a Windows Batch		#
-#    script by Frog, UberGuidoz, and ImprovingRigamarole		#
-#									#
-#    Thanks to everyone who has done testing on various chips for me	#
-#    Thanks to Scorp for compiling needed bins for the ESP32-WROOM	#
-#########################################################################
+#################################################################################
+#    Marauder Flasher Script							#
+#    Python edition by SkeletonMan based off of a Windows Batch			#
+#    script by Frog, UberGuidoz, and ImprovingRigamarole			#
+#										#
+#    Thanks to everyone who has done testing on various chips for me		#
+#    Thanks to Scorp for compiling needed bins for the ESP32-WROOM		#
+#    Thanks to AWOK for pointing out a bug, adding his boards, and testing  	#
+#################################################################################
 '''+Style.RESET_ALL
 
 print(OPENASCII)
@@ -90,7 +91,7 @@ def choose_fw():
 ||  3) Save Flipper Blackmagic WiFi settings		            ||
 ||  4) Flash Flipper Blackmagic				            ||
 ||  5) Flash Marauder on ESP32-WROOM			            ||
-||  6) Flash Marauder on ESP32 Wemos D1 Mini		            ||
+||  6) Flash Marauder on ESP32 Marauder Mini		            ||
 ||  7) Flash Marauder on ESP32-S3			            ||
 ||  8) Flash Marauder on AWOK v1-3 or Duoboard                      ||
 ||  9) Flash Marauder on AWOK v4 Chungus Board                      ||
@@ -102,19 +103,50 @@ def choose_fw():
 || 15) Exit						            ||
 \\\==================================================================//
 '''
+#I know having all these globals isn't great, I may or may not fix it later
+	global selectedfw
+	global selectedboard
+	global flashsize
+	global offset_one
+	global bootloader_bin
+	global offset_two
+	global partitions_bin
+	global offset_three
+	global boot_app
+	global offset_four
+	global fwbin
 	global chip
+
 	print(choices)
 	fwchoice=int(input("Please enter the number of your choice: "))
 	if fwchoice==1:
 		print("You have chosen to flash Marauder on a WiFi devboard or ESP32-S2")
 		chip="esp32s2"
+		selectedfw="Marauder"
+		selectedboard="ESP32-S2"
+		flashsize='4MB'
+		offset_one='0x1000'
+		bootloader_bin=extraesp32bins+'/Marauder/bootloader.bin'
+		offset_two='0x8000'
+		partitions_bin=extraesp32bins+'/Marauder/partitions.bin'
+		offset_three='0x10000'
+		fwbin=esp32marauderfw
 		checkforserialport()
-		flash_esp32marauder()
+		flashtheboard()
 	elif fwchoice==2:
 		print("You have chosen to flash Marauder on a WiFi devboard or ESP32-S2 with SD Serial Support")
 		chip="esp32s2"
+		selectedfw="Marauder with SD Serial Support"
+		selectedboard="ESP32-S2"
+		flashsize='4MB'
+		offset_one='0x1000'
+		bootloader_bin=extraesp32bins+'/Marauder/bootloader.bin'
+		offset_two='0x8000'
+		partitions_bin=extraesp32bins+'/Marauder/partitions.bin'
+		offset_three='0x10000'
+		fwbin=esp32marauderfwserial
 		checkforserialport()
-		flash_esp32marauderserial()
+		flashtheboard()
 	elif fwchoice==3:
 		print("You have chosen to save Flipper Blackmagic WiFi settings")
 		chip="esp32s2"
@@ -128,48 +160,131 @@ def choose_fw():
 	elif fwchoice==5:
 		print("You have chosen to flash Marauder onto an ESP32-WROOM")
 		chip="esp32"
+		selectedfw="Marauder"
+		selectedboard="ESP32-WROOM"
+		flashsize='2MB'
+		offset_one='0x1000'
+		bootloader_bin=scorpbins+'/bootloader.bin'
+		offset_two='0x8000'
+		partitions_bin=scorpbins+'/partitions.bin'
+		offset_three='0x10000'
+		fwbin=espoldhardwarefw
 		checkforserialport()
-		flash_esp32wroom()
+		flashtheboard()
 	elif fwchoice==6:
-		print("You have chosen to flash Marauder onto an ESP32 Wemos D1 Mini")
+		print("You have chosen to flash Marauder onto an ESP32 Marauder Mini")
 		chip="esp32"
+		selectedfw="Marauder"
+		selectedboard="ESP32 Marauder Mini"
+		flashsize='2MB'
+		offset_one='0x1000'
+		bootloader_bin=scorpbins+'/bootloader.bin'
+		offset_two='0x8000'
+		partitions_bin=scorpbins+'/partitions.bin'
+		offset_three='0x10000'
+		fwbin=esp32minifw
 		checkforserialport()
-		flash_esp32wroommini()
+		flashtheboard()
 	elif fwchoice==7:
 		print("You have chosen to flash Marauder onto an ESP32-S3")
 		chip="esp32s3"
+		selectedfw="Marauder"
+		selectedboard="ESP32-S3"
+		flashsize='8MB'
+		offset_one='0x0'
+		bootloader_bin=extraesp32bins+'/S3/bootloader.bin'
+		offset_two='0x8000'
+		partitions_bin=extraesp32bins+'/S3/partitions.bin'
+		offset_three='0xE000'
+		boot_app=extraesp32bins+'/S3/boot_app0.bin'
+		offset_four='0x10000'
+		fwbin=esp32s3fw
 		checkforserialport()
-		flash_esp32s3()
+		flashtheboardwithappbin()
 	elif fwchoice==8:
 		print("You have chosen to flash Marauder onto an AWOK v1-3 or Duoboard")
 		chip="esp32"
+		selectedfw="Marauder"
+		selectedboard="AWOK v1-3 or Duoboard"
+		flashsize='2MB'
+		offset_one='0x1000'
+		bootloader_bin=scorpbins+'/bootloader.bin'
+		offset_two='0x8000'
+		partitions_bin=scorpbins+'/partitions.bin'
+		offset_three='0x10000'
+		fwbin=espoldhardwarefw
 		checkforserialport()
-		flash_esp32awokwroom()
+		flashtheboard()
 	elif fwchoice==9:
 		print("You have chosen to flash Marauder on an AWOK v4 Chungus Board")
 		chip="esp32s2"
+		selectedfw="Marauder"
+		selectedboard="AWOK v4 Chungus Board"
+		flashsize='4MB'
+		offset_one='0x1000'
+		bootloader_bin=extraesp32bins+'/Marauder/bootloader.bin'
+		offset_two='0x8000'
+		partitions_bin=extraesp32bins+'/Marauder/partitions.bin'
+		offset_three='0x10000'
+		fwbin=esp32marauderfw
 		checkforserialport()
-		flash_esp32awokchungus()
+		flashtheboard()
 	elif fwchoice==10:
 		print("You have chosen to flash Marauder on an AWOK v5 ESP32")
 		chip="esp32s2"
+		selectedfw="Marauder with SD Serial Support"
+		selectedboard="AWOK v5 ESP32"
+		flashsize='4MB'
+		offset_one='0x1000'
+		bootloader_bin=extraesp32bins+'/Marauder/bootloader.bin'
+		offset_two='0x8000'
+		partitions_bin=extraesp32bins+'/Marauder/partitions.bin'
+		offset_three='0x10000'
+		fwbin=esp32marauderfwserial
 		checkforserialport()
-		flash_esp32awokv5()
+		flashtheboard()
 	elif fwchoice==11:
 		print("You have chosen to flash Marauder on an AWOK Dual ESP32 (Orange Port)")
 		chip="esp32s2"
+		selectedfw="Marauder with SD Serial Support"
+		selectedboard="AWOK Dual ESP32 (Orange Port)"
+		flashsize='4MB'
+		offset_one='0x1000'
+		bootloader_bin=extraesp32bins+'/Marauder/bootloader.bin'
+		offset_two='0x8000'
+		partitions_bin=extraesp32bins+'/Marauder/partitions.bin'
+		offset_three='0x10000'
+		fwbin=esp32marauderfwserial
 		checkforserialport()
-		flash_esp32awokserial()
+		flashtheboard()
 	elif fwchoice==12: 
 		print("You have chosen to flash Marauder onto an AWOK Dual ESP32 Touch Screen (White Port)")
 		chip="esp32"
+		selectedfw="Marauder"
+		selectedboard="AWOK Dual ESP32 Touch Screen (White Port)"
+		flashsize='2MB'
+		offset_one='0x1000'
+		bootloader_bin=scorpbins+'/bootloader.bin'
+		offset_two='0x8000'
+		partitions_bin=scorpbins+'/partitions.bin'
+		offset_three=0x10000
+		fwbin=espnewhardwarefw
 		checkforserialport()
-		flash_esp32awoktouchscreen()
+		flashtheboard()
 	elif fwchoice==13:
 		print("You have chosen to flash Marauder onto an AWOK Dual ESP32 Mini (White Port)")
 		chip="esp32"
+		selectedfw="Marauder Mini"
+		selectedboard="AWOK Dual ESP32 Mini (White Port)"
+		flashsize='2MB'
+		offset_one='0x1000'
+		bootloader_bin=scorpbins+'/bootloader.bin'
+		offset_two='0x8000'
+		partitions_bin=scorpbins+'/partitions.bin'
+		offset_three=0x10000
+		fwbin=esp32minifw
 		checkforserialport()
-		flash_esp32awokmini()
+		flashtheboard()
 	elif fwchoice==14:
 		print("You have chosen to update all of the files")
 		update_option()
@@ -183,7 +298,6 @@ def choose_fw():
 	return
 
 def erase_esp32fw():
-	global serialport
 	tries=3
 	attempts=0
 	for i in range(tries):
@@ -266,25 +380,13 @@ def checkforoldhardwarebin():
 	return
 
 def checkforminibin():
-	espd1minifwc=('ESP32Marauder/releases/esp32_marauder_v*_mini.bin')
-	if not glob.glob(espd1minifwc):
+	esp32minifwc=('ESP32Marauder/releases/esp32_marauder_v*_mini.bin')
+	if not glob.glob(esp32minifwc):
 		print("mini bin does not exist!")
-	global espd1minifw
-	for espd1minifw in glob.glob(espd1minifwc):
-		if os.path.exists(espd1minifw):
-			print("Mini bin exists at", espd1minifw)
-		else:
-			print("Somehow, the mini bin does not exist!")
-	return
-
-def checkforminibin(): #added mini path for AWOK as "espminifw" 
-	espminifwc=('ESP32Marauder/releases/esp32_marauder_v*_mini.bin')
-	if not glob.glob(espminifwc):
-		print("mini bin does not exist!")
-	global espminifw
-	for espminifw in glob.glob(espminifwc):
-		if os.path.exists(espminifw):
-			print("Mini bin exists at", espminifw)
+	global esp32minifw
+	for esp32minifw in glob.glob(esp32minifwc):
+		if os.path.exists(esp32minifw):
+			print("Mini bin exists at", esp32minifw)
 		else:
 			print("Somehow, the mini bin does not exist!")
 	return
@@ -312,95 +414,49 @@ def prereqcheck():
 	checkfornewhardwarebin()
 	return
 
-def flash_esp32marauder():
-	global serialport
+def flashtheboard():
 	erase_esp32fw()
 	tries=3
 	attempts=0
 	for i in range(tries):
 		try:
 			attempts+=1
-			print("Flashing ESP32 Marauder Firmware on a WiFi Devboard or ESP32-S2...")
-			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Marauder/bootloader.bin', '0x8000', extraesp32bins+'/Marauder/partitions.bin', '0x10000', esp32marauderfw])
+			print("Flashing", selectedfw, "on", selectedboard)
+			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', flashsize, offset_one, bootloader_bin, offset_two, partitions_bin, offset_three, fwbin])
 		except Exception as err:
 			print(err)
 			if attempts==3:
-				print("Could not flash firmware on ESP32-S2")
+				print("Could not flash", selectedfw, "on", selectedboard)
 				exit()
 			print("Waiting 5 seconds and trying again...")
 			time.sleep(5)
 			continue
-		print(Fore.GREEN+"ESP32-S2 has been flashed with Marauder!"+Style.RESET_ALL)
+		print(Fore.GREEN+selectedboard, "has been flashed with", selectedfw+Style.RESET_ALL)
 		break
 	return
 
-def flash_esp32marauderserial():
-	global serialport
+def flashtheboardwithappbin():
 	erase_esp32fw()
 	tries=3
 	attempts=0
 	for i in range(tries):
 		try:
 			attempts+=1
-			print("Flashing ESP32 Marauder Firmware with SD Serial support on a WiFi Devboard or ESP32-S2...")
-			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Marauder/bootloader.bin', '0x8000', extraesp32bins+'/Marauder/partitions.bin', '0x10000', esp32marauderfwserial])
+			print("Flashing", selectedfw, "on", selectedboard)
+			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', flashsize, offset_one, bootloader_bin, offset_two, partitions_bin, offset_three, boot_app, offset_four, fwbin])
 		except Exception as err:
 			print(err)
 			if attempts==3:
-				print("Could not flash Marauder firmware on ESP32-S2")
+				print("Could not flash", selectedfw, "on", selectedboard)
 				exit()
 			print("Waiting 5 seconds and trying again...")
 			time.sleep(5)
 			continue
-		print(Fore.GREEN+"ESP32-S2 has been flashed with Marauder with SD serial support!"+Style.RESET_ALL)
-		break
-	return
-
-def flash_esp32wroom():
-	global serialport
-	erase_esp32fw()
-	tries=3
-	attempts=0
-	for i in range(tries):
-		try:
-			attempts+=1
-			print("Flashing ESP32 Marauder Firmware onto ESP32-WROOM...")
-			esptool.main(['-p', serialport, '-b', BR, '--before', 'default_reset', '--after', 'hard_reset', '-c', chip, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '2MB', '0x8000', scorpbins+'/partitions.bin', '0x1000', scorpbins+'/bootloader.bin', '0x10000', espoldhardwarefw])
-		except Exception as err:
-			print(err)
-			if attempts==3:
-				print("Could not flash Marauder firmware on ESP32-WROOM")
-				exit()
-			print("Waiting 5 seconds and trying again...")
-			time.sleep(5)
-			continue
-		print(Fore.GREEN+"ESP32-WROOM has been flashed with Marauder!"+Style.RESET_ALL)
-		break
-	return
-
-def flash_esp32wroommini():
-	erase_esp32fw()
-	tries=3
-	attempts=0
-	for i in range(tries):
-		try:
-			attempts +=1
-			print("Flashing ESP32 Marauder Firmware onto ESP32-WROOM D1 Mini...")
-			esptool.main(['-p', serialport, '-b', BR, '--before', 'default_reset', '--after', 'hard_reset', '-c', chip, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '2MB', '0x8000', scorpbins+'/partitions.bin', '0x1000', scorpbins+'/bootloader.bin', '0x10000', espd1minifw])
-		except Exception as err:
-			print(err)
-			if attempts==3:
-				print("Could not flash Marauder firmware on ESP32-WROOM D1 Mini")
-				exit()
-			print("Waiting 5 seconds and trying again...")
-			time.sleep(5)
-			continue
-		print(Fore.GREEN+"ESP32-WROOM D1 Mini has been flashed with Marauder!"+Style.RESET_ALL)
+		print(Fore.GREEN+selectedboard, "has been flashed with", selectedfw+Style.RESET_ALL)
 		break
 	return
 
 def save_flipperbmsettings():
-	global serialport
 	tries=3
 	attempts=0
 	for i in range(tries):
@@ -441,139 +497,7 @@ def flash_flipperbm():
 			print(Fore.GREEN+"Flipper Blackmagic has been flashed with the WiFi Settings restored"+Style.RESET_ALL)
 			break
 		return
-	
-def flash_esp32awoktouchscreen(): #added AWOK board options here
-	global serialport
-	erase_esp32fw()
-	tries=3
-	attempts=0
-	for i in range(tries):
-		try:
-			attempts+=1
-			print("Flashing ESP32 Marauder Firmware onto an AWOK Dual ESP32 Touch Screen (White Port)...")
-			esptool.main(['-p', serialport, '-b', BR, '--before', 'default_reset', '--after', 'hard_reset', '-c', chip, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '2MB', '0x8000', scorpbins+'/partitions.bin', '0x1000', scorpbins+'/bootloader.bin', '0x10000', espnewhardwarefw])
-		except Exception as err:
-			print(err)
-			if attempts==3:
-				print("Could not flash Marauder firmware on to the AWOK Dual ESP32 Touch Screen (White Port)")
-				exit()
-			print("Waiting 5 seconds and trying again...")
-			time.sleep(5)
-			continue
-		print(Fore.GREEN+"Your Device has been flashed with Marauder!"+Style.RESET_ALL)
-		break
-	return
-
-def flash_esp32awokmini():
-	erase_esp32fw()
-	tries=3
-	attempts=0
-	for i in range(tries):
-		try:
-			attempts +=1
-			print("Flashing ESP32 Marauder Firmware onto an AWOK Dual ESP32 Mini (White Port)...")
-			esptool.main(['-p', serialport, '-b', BR, '--before', 'default_reset', '--after', 'hard_reset', '-c', chip, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '2MB', '0x8000', scorpbins+'/partitions.bin', '0x1000', scorpbins+'/bootloader.bin', '0x10000', espminifw])
-		except Exception as err:
-			print(err)
-			if attempts==3:
-				print("Could not flash Marauder firmware on the AWOK Dual ESP32 Mini (White Port)")
-				exit()
-			print("Waiting 5 seconds and trying again...")
-			time.sleep(5)
-			continue
-		print(Fore.GREEN+"Your Device has been flashed with Marauder!"+Style.RESET_ALL)
-		break
-	return
-
-def flash_esp32awokserial():
-	global serialport
-	erase_esp32fw()
-	tries=3
-	attempts=0
-	for i in range(tries):
-		try:
-			attempts+=1
-			print("Flashing ESP32 Marauder Firmware with SD Serial support on an AWOK Dual ESP32...")
-			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Marauder/bootloader.bin', '0x8000', extraesp32bins+'/Marauder/partitions.bin', '0x10000', esp32marauderfwserial])
-		except Exception as err:
-			print(err)
-			if attempts==3:
-				print("Could not flash Marauder firmware on the AWOK Dual ESP32")
-				exit()
-			print("Waiting 5 seconds and trying again...")
-			time.sleep(5)
-			continue
-		print(Fore.GREEN+"Your Device has been flashed with Marauder!"+Style.RESET_ALL)
-		break
-	return
-
-def flash_esp32awokv5():
-	global serialport
-	erase_esp32fw()
-	tries=3
-	attempts=0
-	for i in range(tries):
-		try:
-			attempts+=1
-			print("Flashing ESP32 Marauder Firmware with SD Serial support on an AWOK v5 ESP32...")
-			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Marauder/bootloader.bin', '0x8000', extraesp32bins+'/Marauder/partitions.bin', '0x10000', esp32marauderfwserial])
-		except Exception as err:
-			print(err)
-			if attempts==3:
-				print("Could not flash Marauder firmware on the AWOK v5 ESP32")
-				exit()
-			print("Waiting 5 seconds and trying again...")
-			time.sleep(5)
-			continue
-		print(Fore.GREEN+"Your Device has been flashed with Marauder!"+Style.RESET_ALL)
-		break
-	return
-
-def flash_esp32awokwroom():
-	global serialport
-	erase_esp32fw()
-	tries=3
-	attempts=0
-	for i in range(tries):
-		try:
-			attempts+=1
-			print("Flashing ESP32 Marauder Firmware onto an AWOK v1-3 or Duoboard...")
-			esptool.main(['-p', serialport, '-b', BR, '--before', 'default_reset', '--after', 'hard_reset', '-c', chip, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '2MB', '0x8000', scorpbins+'/partitions.bin', '0x1000', scorpbins+'/bootloader.bin', '0x10000', espoldhardwarefw])
-		except Exception as err:
-			print(err)
-			if attempts==3:
-				print("Could not flash Marauder firmware on the AWOK v1-3 or Duoboard")
-				exit()
-			print("Waiting 5 seconds and trying again...")
-			time.sleep(5)
-			continue
-		print(Fore.GREEN+"Your Device has been flashed with Marauder!"+Style.RESET_ALL)
-		break
-	return
-
-def flash_esp32awokchungus():
-	global serialport
-	erase_esp32fw()
-	tries=3
-	attempts=0
-	for i in range(tries):
-		try:
-			attempts+=1
-			print("Flashing ESP32 Marauder Firmware on an AWOK v4 Chungus Board...")
-			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', extraesp32bins+'/Marauder/bootloader.bin', '0x8000', extraesp32bins+'/Marauder/partitions.bin', '0x10000', esp32marauderfw])
-		except Exception as err:
-			print(err)
-			if attempts==3:
-				print("Could not flash firmware on the AWOK v4 Chungus Board")
-				exit()
-			print("Waiting 5 seconds and trying again...")
-			time.sleep(5)
-			continue
-		print(Fore.GREEN+"Your Device has been flashed with Marauder!"+Style.RESET_ALL)
-		break
-
 	else:
-
 		erase_esp32fw()
 		tries=3
 		attempts=0
@@ -595,7 +519,6 @@ def flash_esp32awokchungus():
 	return
 
 def flash_esp32s3():
-	global serialport
 	erase_esp32fw()
 	tries=3
 	attempts=0
