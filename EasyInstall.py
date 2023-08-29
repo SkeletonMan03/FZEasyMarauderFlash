@@ -518,27 +518,6 @@ def flash_flipperbm():
 			break
 	return
 
-def flash_esp32s3():
-	erase_esp32fw()
-	tries=3
-	attempts=0
-	for i in range(tries):
-		try:
-			attempts +=1
-			print("Flashing ESP32 Marauder Firmware onto ESP32-S3...")
-			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '8MB', '0x0', extraesp32bins+'/S3/bootloader.bin', '0x8000', extraesp32bins+'/S3/partitions.bin', '0xE000', extraesp32bins+'/S3/boot_app0.bin', '0x10000', esp32s3fw])
-		except Exception as err:
-			print(err)
-			if attempts==3:
-				print("Could not flash Marauder firmware on ESP32-S3")
-				exit()
-			print("Waiting 5 seconds and trying again...")
-			time.sleep(5)
-			continue
-		print(Fore.GREEN+"ESP32-S3 has been flashed with Marauder!"+Style.RESET_ALL)
-		break
-	return
-
 def update_option():
 	print("Checking for and deleting the files before replacing them...")
 	cwd = os.getcwd()
