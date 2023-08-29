@@ -106,4 +106,4 @@ Disclaimer: Also includes Acknowledgements from the above linked repo from UberG
 * [Der Skythe](https://github.com/derskythe) For fixing extra quotes I added without noticing and his awesome work on Flipper Zero Firmware
 * [seeker7r4c3r](https://github.com/seeker7r4c3r) For adding the VID of the DrB0rk S3 Multiboard
 * [aafksab](https://github.com/aafksab) For fixing the Windows bug with the update option that was confusing me
-* [AWOK] (https://github.com/AWOK559) For adding his boards, testing, and kind of forcing me to do much needed cleanup by doing so
+* [AWOK](https://github.com/AWOK559) For adding his boards, testing, and kind of forcing me to do much needed cleanup by doing so
