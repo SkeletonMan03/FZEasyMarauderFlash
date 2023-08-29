@@ -267,7 +267,7 @@ def choose_fw():
 		bootloader_bin=scorpbins+'/bootloader.bin'
 		offset_two='0x8000'
 		partitions_bin=scorpbins+'/partitions.bin'
-		offset_three=0x10000
+		offset_three='0x10000'
 		fwbin=espnewhardwarefw
 		checkforserialport()
 		flashtheboard()
@@ -281,7 +281,7 @@ def choose_fw():
 		bootloader_bin=scorpbins+'/bootloader.bin'
 		offset_two='0x8000'
 		partitions_bin=scorpbins+'/partitions.bin'
-		offset_three=0x10000
+		offset_three='0x10000'
 		fwbin=esp32minifw
 		checkforserialport()
 		flashtheboard()
