@@ -58,8 +58,8 @@ There are now optional parameters
 * `-s` or `--serialport` <Serial Port>
 For example, if you have a device you know is on `/dev/ttyUSB0`, you could specify it with `python3 EasyInstall.py -s /dev/ttyUSB0` or `python3 EasyInstall.py --serialport /dev/ttyUSB0` 
 * Using this option will skip automatic detection of the serial port and will not try to identify the device
-* `-ps` or `--preselect` - Preselect an option of what you want to flash
-For example, if you want to flash a WiFi Devboard or ESP32-S2 without selecting from the menu, you could use `python3 EasyInstall.py -ps 1` or `python3 EasyInstall.py --preselect 1`
+* `-ps` or `--preselect` - Preselect an option of what you want to flash  
+For example, if you want to flash a WiFi Devboard or ESP32-S2 without selecting from the menu, you could use `python3 EasyInstall.py -ps 1` or `python3 EasyInstall.py --preselect 1`  
 
 ## Disclaimer:
 I am absolutely not resposible if you somehow manage to brick your device with this tool (especially if you did it using optional parameters) and I cannot help you fix it. 
