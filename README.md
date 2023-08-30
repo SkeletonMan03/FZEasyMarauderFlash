@@ -32,9 +32,9 @@ You can find it [here in UberGuidoZ's repo](https://github.com/UberGuidoZ/Flippe
 
 ## About this script
 * There have been MASSIVE changes to how the settings are done for flashing because it started becoming cluttered and this script became too long, but this won't affect usage.  
-This script pulls all of its resources from the proper Github repositories in order to make sure you are up-to-date.  
-The only dependencies it does not get by itself are the required Python modules and Windows tools.  
-This script should work on most devices that can run Python 3 and can access serial ports via USB.  
+* This script pulls all of its resources from the proper Github repositories in order to make sure you are up-to-date.  
+* The only dependencies it does not get by itself are the required Python modules and Windows tools.  
+* This script should work on most devices that can run Python 3 and can access serial ports via USB.  
 
 ## Compatible boards
 * Flipper Zero WiFi Devboard  
@@ -58,6 +58,8 @@ There are now optional parameters
 * `-s` or `--serialport` <Serial Port>
 For example, if you have a device you know is on `/dev/ttyUSB0`, you could specify it with `python3 EasyInstall.py -s /dev/ttyUSB0` or `python3 EasyInstall.py --serialport /dev/ttyUSB0` 
 * Using this option will skip automatic detection of the serial port and will not try to identify the device
+* `-ps` or `--preselect` - Preselect an option of what you want to flash
+For example, if you want to flash a WiFi Devboard or ESP32-S2 without selecting from the menu, you could use `python3 EasyInstall.py -ps 1` or `python3 EasyInstall.py --preselect 1`
 
 ## Disclaimer:
 I am absolutely not resposible if you somehow manage to brick your device with this tool (especially if you did it using optional parameters) and I cannot help you fix it. 
@@ -82,7 +84,6 @@ Simply, because Windows users seem to come across the most issues (and to be fai
 ## TODO:
 * More code cleanup.  
 * Attempt to accommodate more boards that can be used with Marauder
-* Add more optional parameters, maybe an option to automatically pick a flashing option from the list for automation like I know AWOK is doing
 * Possibly add other popular ESP32 firmware that is used with Flipper Zeros
 * Maybe a name change for the repo after adding more FW support
 
@@ -106,4 +107,4 @@ Disclaimer: Also includes Acknowledgements from the above linked repo from UberG
 * [Der Skythe](https://github.com/derskythe) For fixing extra quotes I added without noticing and his awesome work on Flipper Zero Firmware
 * [seeker7r4c3r](https://github.com/seeker7r4c3r) For adding the VID of the DrB0rk S3 Multiboard
 * [aafksab](https://github.com/aafksab) For fixing the Windows bug with the update option that was confusing me
-* [AWOK](https://github.com/AWOK559) For adding his boards, testing, and kind of forcing me to do much needed cleanup by doing so
+* [AWOK](https://github.com/AWOK559) For adding his boards, testing, pointing out bugs, and kind of forcing me to do much needed cleanup by doing so

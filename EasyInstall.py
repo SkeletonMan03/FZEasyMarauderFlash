@@ -16,8 +16,10 @@ import argparse
 
 parser=argparse.ArgumentParser()
 parser.add_argument('-s', '--serialport', type=str, help="Define serial port", default='')
+parser.add_argument('-ps', '--preselect', type=int, help="Preselect flashing option", default=None)
 args=parser.parse_args()
 serialport=args.serialport
+fwchoice=args.preselect
 
 OPENASCII=Fore.GREEN+'''
 #################################################################################
@@ -55,7 +57,10 @@ def checkforserialport():
 	if serialport=='':
 		print(Fore.RED+"No ESP32 device was detected!"+Style.RESET_ALL)
 		print(Fore.RED+"Please plug in a Flipper WiFi devboard or an ESP32 chip and try again"+Style.RESET_ALL)
-		choose_fw()
+		if fwchoicepreselect==False:
+			choose_fw()
+		elif fwchoicepreselect==True:
+			exit()
 	if device=='':
 		return
 	elif device=='303A':
@@ -118,9 +123,18 @@ def choose_fw():
 	global fwbin
 	global chip
 	global fwchoice
+	global fwchoicepreselect
 
-	print(choices)
-	fwchoice=int(input("Please enter the number of your choice: "))
+	if fwchoice!=None:
+		fwchoicepreselect=True
+		print(Fore.BLUE+"You have preselected option", fwchoice,Style.RESET_ALL)
+		print("If you didn't mean to do this, CTRL-C now!")
+		print("Waiting 5 seconds before continuing...")
+		time.sleep(5)
+	else:
+		fwchoicepreselect=False
+		print(choices)
+		fwchoice=int(input("Please enter the number of your choice: "))
 	if fwchoice==1:
 		print("You have chosen to flash Marauder on a WiFi devboard or ESP32-S2")
 		chip="esp32s2"
