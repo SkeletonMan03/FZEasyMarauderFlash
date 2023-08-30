@@ -55,7 +55,7 @@ GND -> GND
 ## Optional parameters
 There are now optional parameters
 * `-h` or `--help` - Show help
-* `-s` or `--serialport` <Serial Port>
+* `-s` or `--serialport` <Serial Port>  
 For example, if you have a device you know is on `/dev/ttyUSB0`, you could specify it with `python3 EasyInstall.py -s /dev/ttyUSB0` or `python3 EasyInstall.py --serialport /dev/ttyUSB0` 
 * Using this option will skip automatic detection of the serial port and will not try to identify the device
 * `-ps` or `--preselect` - Preselect an option of what you want to flash  
