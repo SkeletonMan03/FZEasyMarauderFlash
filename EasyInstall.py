@@ -21,13 +21,14 @@ serialport=args.serialport
 
 OPENASCII=Fore.GREEN+'''
 #################################################################################
-#    Marauder Flasher Script							#
-#    Python edition by SkeletonMan based off of a Windows Batch			#
-#    script by Frog, UberGuidoz, and ImprovingRigamarole			#
+#                        Marauder Flasher Script				#
+#                     Python edition by SkeletonMan				#
+#		     Based off of a Windows Batch script			#
+#    		by Frog, UberGuidoz, and ImprovingRigamarole			#
 #										#
-#    Thanks to everyone who has done testing on various chips for me		#
-#    Thanks to Scorp for compiling needed bins for the ESP32-WROOM		#
-#    Thanks to AWOK for pointing out a bug, adding his boards, and testing  	#
+#       Thanks to everyone who has done testing on various chips for me		#
+#        Thanks to Scorp for compiling needed bins for the ESP32-WROOM		#
+#    Thanks to AWOK for pointing out bugs, adding his boards, and testing  	#
 #################################################################################
 '''+Style.RESET_ALL
 
@@ -116,6 +117,7 @@ def choose_fw():
 	global offset_four
 	global fwbin
 	global chip
+	global fwchoice
 
 	print(choices)
 	fwchoice=int(input("Please enter the number of your choice: "))
@@ -414,6 +416,8 @@ def prereqcheck():
 	checkfornewhardwarebin()
 	return
 
+hardresetlist=[5, 6, 8, 12, 13]
+
 def flashtheboard():
 	erase_esp32fw()
 	tries=3
@@ -422,7 +426,10 @@ def flashtheboard():
 		try:
 			attempts+=1
 			print("Flashing", selectedfw, "on", selectedboard)
-			esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', flashsize, offset_one, bootloader_bin, offset_two, partitions_bin, offset_three, fwbin])
+			if fwchoice in hardresetlist:
+				esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'hard_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', flashsize, offset_two, partitions_bin, offset_one, bootloader_bin, offset_three, fwbin])
+			else:
+				esptool.main(['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'no_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', flashsize, offset_one, bootloader_bin, offset_two, partitions_bin, offset_three, fwbin])
 		except Exception as err:
 			print(err)
 			if attempts==3:
