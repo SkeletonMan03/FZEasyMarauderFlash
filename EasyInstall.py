@@ -416,7 +416,7 @@ def prereqcheck():
 	checkfornewhardwarebin()
 	return
 
-hardresetlist=[5, 6, 8, 12, 13]
+hardresetlist=[5, 6, 8, 9, 10, 11, 12, 13]
 
 def flashtheboard():
 	erase_esp32fw()
