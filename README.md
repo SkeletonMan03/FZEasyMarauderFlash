@@ -1,4 +1,4 @@
-# Easy Flipper Zero Marauder Flash
+# Easy Flipper Zero ESP32 Flash
 This is for easily flashing Marauder on an ESP32 or WiFi Devboard for a Flipper Zero!
 ![Screenshot of EasyInstall](https://raw.githubusercontent.com/SkeletonMan03/FZEasyMarauderFlash/main/EasyInstall_Screenshot.png)
 
@@ -11,7 +11,7 @@ If you are flashing an ESP32 board, you need to install the [driver from here](h
 You have one prerequisite.  
 You need to install `git` however you would on your system if you haven't already.  
 
-## It is now simple to install or update Marauder on Linux, Mac OS X, or Windows.
+## It is now simple to install or update Marauder or Evil Portal on Linux, Mac OS X, or Windows.
 # How to use: 
 * Ideally use a venv as it's best practice with any Python scripts, although it isn't required (Google it if you don't know what that is)
 * Step 0 only has to be ran once. (That doesn't mean it's okay to skip it unless you're running it again after having just used it)
@@ -26,7 +26,7 @@ You need to install `git` however you would on your system if you haven't alread
 
 * Important note: You may need to run this script with `sudo` or as Administrator in Windows, but normally you shouldn't have to
 
-## This project is based on the Windows Marauder flasher batch script
+## This project was based on the Windows Marauder flasher batch script
 
 You can find it [here in UberGuidoZ's repo](https://github.com/UberGuidoZ/Flipper/blob/main/Wifi_DevBoard/FZ_Marauder_Flasher)
 
@@ -35,6 +35,7 @@ You can find it [here in UberGuidoZ's repo](https://github.com/UberGuidoZ/Flippe
 * This script pulls all of its resources from the proper Github repositories in order to make sure you are up-to-date.  
 * The only dependencies it does not get by itself are the required Python modules and Windows tools.  
 * This script should work on most devices that can run Python 3 and can access serial ports via USB.  
+* Support for Evil Portal has been added!
 
 ## Compatible boards
 * Flipper Zero WiFi Devboard  
@@ -82,10 +83,9 @@ Here are some steps to try:
 Simply, because Windows users seem to come across the most issues (and to be fair, this was a pain to make work properly in Windows), a lot of which are users not understanding how to use the CLI or not reading this whole page, especially the top section.  
 
 ## TODO:
-* More code cleanup.  
-* Attempt to accommodate more boards that can be used with Marauder
-* Possibly add other popular ESP32 firmware that is used with Flipper Zeros
-* Maybe a name change for the repo after adding more FW support
+* Even more code cleanup.  
+* Add other popular ESP32 firmware that is used with Flipper Zeros
+* Maybe an official name change
 
 ## Contributors:
 * I GREATLY appreciate contributions and PRs, thank you!
@@ -108,3 +108,5 @@ Disclaimer: Also includes Acknowledgements from the above linked repo from UberG
 * [seeker7r4c3r](https://github.com/seeker7r4c3r) For adding the VID of the DrB0rk S3 Multiboard
 * [aafksab](https://github.com/aafksab) For fixing the Windows bug with the update option that was confusing me
 * [AWOK](https://github.com/AWOK559) For adding his boards, testing, pointing out bugs, and kind of forcing me to do much needed cleanup by doing so
+* [bigbrodude6119](https://github.com/bigbrodude6119/flipper-zero-evil-portal) For creating Evil Portal
+* [TalkingSasquach](https://github.com/skizzophrenic) For creating single file bins for Evil Portal
