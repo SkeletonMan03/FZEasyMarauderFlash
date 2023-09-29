@@ -147,7 +147,7 @@ def choose_fw():
 		offset_three='0x10000'
 		fwbin=esp32marauderfw
 		checkforserialport()
-		eraseparams=['-p', serialport, '-b', BR, 'erase_flash']
+		eraseparams=['-p', serialport, '-b', BR, '-a', 'no_reset', 'erase_flash']
 		flashparams=['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', reset, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', flashsize, offset_one, bootloader_bin, offset_two, partitions_bin, offset_three, fwbin]
 		flashtheboard(eraseparams, flashparams)
 	elif fwchoice==2:
@@ -163,7 +163,7 @@ def choose_fw():
 		offset_three='0x10000'
 		fwbin=esp32marauderfwserial
 		checkforserialport()
-		eraseparams=['-p', serialport, '-b', BR, 'erase_flash']
+		eraseparams=['-p', serialport, '-b', BR, '-a', 'no_reset', 'erase_flash']
 		flashparams=['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', reset, 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', flashsize, offset_one, bootloader_bin, offset_two, partitions_bin, offset_three, fwbin]
 		flashtheboard(eraseparams, flashparams)
 	elif fwchoice==3:
@@ -362,7 +362,7 @@ def choose_fw():
 		offset_one='0x1000'
 		fwbin=evilportalfws2
 		checkforserialport()
-		eraseparams=['-p', serialport, '-b', BR, 'erase_flash']
+		eraseparams=['-p', serialport, '-b', BR, '-a', 'no_reset', 'erase_flash']
 		flashparams=['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'hard_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', flashsize, offset_one, fwbin]
 		flashtheboard(eraseparams, flashparams)
 	elif fwchoice==16:
