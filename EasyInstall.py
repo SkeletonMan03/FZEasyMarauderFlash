@@ -200,7 +200,7 @@ def choose_fw():
 		chip="esp32"
 		selectedfw="Marauder"
 		selectedboard="ESP32-WROOM"
-		flashsize='2MB'
+		flashsize='4MB'
 		offset_one='0x1000'
 		bootloader_bin=scorpbins+'/bootloader.bin'
 		offset_two='0x8000'
@@ -216,7 +216,7 @@ def choose_fw():
 		chip="esp32"
 		selectedfw="Marauder"
 		selectedboard="ESP32 Marauder Mini"
-		flashsize='2MB'
+		flashsize='4MB'
 		offset_one='0x1000'
 		bootloader_bin=scorpbins+'/bootloader.bin'
 		offset_two='0x8000'
@@ -250,7 +250,7 @@ def choose_fw():
 		chip="esp32"
 		selectedfw="Marauder"
 		selectedboard="AWOK v1-3 or Duoboard"
-		flashsize='2MB'
+		flashsize='4MB'
 		offset_one='0x1000'
 		bootloader_bin=scorpbins+'/bootloader.bin'
 		offset_two='0x8000'
@@ -314,7 +314,7 @@ def choose_fw():
 		chip="esp32"
 		selectedfw="Marauder"
 		selectedboard="AWOK Dual ESP32 Touch Screen (White Port)"
-		flashsize='2MB'
+		flashsize='4MB'
 		offset_one='0x1000'
 		bootloader_bin=scorpbins+'/bootloader.bin'
 		offset_two='0x8000'
@@ -330,7 +330,7 @@ def choose_fw():
 		chip="esp32"
 		selectedfw="Marauder Mini"
 		selectedboard="AWOK Dual ESP32 Mini (White Port)"
-		flashsize='2MB'
+		flashsize='4MB'
 		offset_one='0x1000'
 		bootloader_bin=scorpbins+'/bootloader.bin'
 		offset_two='0x8000'
@@ -346,7 +346,7 @@ def choose_fw():
 		chip="esp32"
 		selectedfw="Evil Portal"
 		selectedboard="ESP32-WROOM"
-		flashsize='2MB'
+		flashsize='4MB'
 		offset_one='0x1000'
 		fwbin=evilportalfwwroom
 		checkforserialport()
@@ -362,7 +362,7 @@ def choose_fw():
 		offset_one='0x1000'
 		fwbin=evilportalfws2
 		checkforserialport()
-		eraseparams=['-p', serialport, '-b', BR, '-a', 'no_reset', 'erase_flash']
+		eraseparams=['-p', serialport, '-b', BR,  '-a', 'no_reset', 'erase_flash']
 		flashparams=['-p', serialport, '-b', BR, '-c', chip, '--before', 'default_reset', '-a', 'hard_reset', 'write_flash', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', flashsize, offset_one, fwbin]
 		flashtheboard(eraseparams, flashparams)
 	elif fwchoice==16:
@@ -416,7 +416,7 @@ def checkforesp32marauder():
 		marauderapi="https://api.github.com/repos/justcallmekoko/ESP32Marauder/releases/latest"
 		response=requests.get(marauderapi)
 		jsondata=response.json()
-		assetdls=range(0,10)
+		assetdls=range(0,11)
 		for assetdl in assetdls:
 			marauderasset=jsondata['assets'][assetdl]['browser_download_url']
 			if marauderasset.find('/'):
@@ -470,7 +470,7 @@ def checkforesp32marauderserial():
 	return
 
 def checkfors3bin():
-	esp32s3fwc=('ESP32Marauder/releases/esp32_marauder_v*_multiboardS3.bin')
+	esp32s3fwc=('ESP32Marauder/releases/esp32_marauder_v*ultiboardS3.bin')
 	if not glob.glob(esp32s3fwc):
 		print("mutliboards3 bin does not exist!")
 	global esp32s3fw
@@ -506,7 +506,7 @@ def checkforminibin():
 	return
 
 def checkfornewhardwarebin():
-	espnewhardwarefwc=('ESP32Marauder/releases/esp32_marauder_v*_new_hardware.bin')
+	espnewhardwarefwc=('ESP32Marauder/releases/esp32_marauder_v*_v6.bin')
 	if not glob.glob(espnewhardwarefwc):
 		print("new_hardware bin does not exist!")
 	global espnewhardwarefw
