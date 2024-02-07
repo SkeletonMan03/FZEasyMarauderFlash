@@ -24,8 +24,6 @@ You need to install `git` however you would on your system if you haven't alread
 5) run `python3 EasyInstall.py`. 
 6) Select the option of what you want to do
 
-* Important note: You may need to run this script with `sudo` or as Administrator in Windows, but normally you shouldn't have to
-
 ## This project was based on the Windows Marauder flasher batch script
 
 You can find it [here in UberGuidoZ's repo](https://github.com/UberGuidoZ/Flipper/blob/main/Wifi_DevBoard/FZ_Marauder_Flasher)
@@ -36,6 +34,7 @@ You can find it [here in UberGuidoZ's repo](https://github.com/UberGuidoZ/Flippe
 * The only dependencies it does not get by itself are the required Python modules and Windows tools.  
 * This script should work on most devices that can run Python 3 and can access serial ports via USB.  
 * Support for Evil Portal has been added!
+* As of Marauder Update 0.13.7, there is no more serial bin, it is unified, but the latest Marauder Companion App (7.0) is required to use it on your Flipper
 
 ## Compatible boards
 * Flipper Zero WiFi Devboard  
@@ -72,7 +71,7 @@ Here are some steps to try:
 * Check that your computer can see the device. In Linux, run `lsusb`, on Mac run `system_profiler SPUSBDataType`, on Windows, open your Device Manager and look for it
 * Try a different cable
 * Try a different USB port
-* Check your permissions. On Linux, you may have to add yourself to whatever group owns the port. Or you can change ownership of the serial port (however this is not recommended), for example, /dev/ttyUSB0 is typically owned by root and the dialout or uucp group (depending on your distro), so you could run something like `chown user:group /dev/ttyUSB0`
+* Check your permissions. On Linux, you may have to add yourself to whatever group owns the port. For example, `/dev/ttyUSB0` is typically owned by root and the dialout or uucp group (depending on your distro), find out which by running `ls -la /dev/ttyUSB0`, make note of the user and group that own it, then run `sudo usermod -aG group user` replacing group and user with the correct ones, then log out and back in.  
 * Windows users: Can't find or communicate with your ESP32? Again, make sure the driver is installed, see above recommendations.  
 * If you're using Windows, don't use Git Bash, it doesn't work well with this script. Instead, use Powershell, Windows Terminal, or CMD
 * On Windows and Python is acting strange? Uninstall it then re-install it via the Microsoft Store.
@@ -84,12 +83,11 @@ Simply, because Windows users seem to come across the most issues (and to be fai
 
 ## TODO:
 * Even more code cleanup.  
-* Add other popular ESP32 firmware that is used with Flipper Zeros
+* Add other popular ESP32 firmware
 * Maybe an official name change
 
 ## Contributors:
 * I GREATLY appreciate contributions and PRs, thank you!
-* If you are going to add more boards, please try to avoid adding a new flashing function and try to use `flashtheboard()` like most of the options if possible
 
 ## Acknowledgements:
 Disclaimer: Also includes Acknowledgements from the above linked repo from UberGuidoz as this wouldn't exist without the original project
