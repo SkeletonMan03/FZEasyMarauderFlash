@@ -21,7 +21,7 @@ args=parser.parse_args()
 serialport=args.serialport
 fwchoice=args.preselect
 
-OPENASCII=Fore.GREEN+'''
+OPENASCII=Fore.GREEN+r'''
 #################################################################################
 #                          ESP32 FZEasyFlasher					#
 #                          by Lord SkeletonMan                                  #
@@ -92,8 +92,8 @@ def checkforextrabins():
 	return
 
 def choose_fw():
-	choices='''
-//==================================================================\\\ 
+	choices=r'''
+//==================================================================\\
 || Options:						            ||
 ||  1) Flash Marauder on WiFi Devboard or ESP32-S2	            ||
 ||  2) Save Flipper Blackmagic WiFi settings		            ||
@@ -113,7 +113,7 @@ def choose_fw():
 || 16) Just Erase ESP32 - Try this if you think you bricked it	    ||
 || 17) Update all files					            ||
 || 18) Exit						            ||
-\\\==================================================================//
+\\==================================================================//
 '''
 	#Still not perfect, but better
 	global selectedfw
