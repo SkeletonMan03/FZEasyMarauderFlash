@@ -1,3 +1,4 @@
+cryptography
 gitpython
 glob2
 pyserial
