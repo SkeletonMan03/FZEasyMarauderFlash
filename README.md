@@ -24,6 +24,16 @@ You need to install `git` however you would on your system if you haven't alread
 5) run `python3 EasyInstall.py`. 
 6) Select the option of what you want to do
 
+## Using make
+
+```shell
+make doctor #make sure you have python
+```
+
+```shell
+make run #install the requirements and run the installer
+```
+
 ## This project was based on the Windows Marauder flasher batch script
 
 You can find it [here in UberGuidoZ's repo](https://github.com/UberGuidoZ/Flipper/blob/main/Wifi_DevBoard/FZ_Marauder_Flasher)
