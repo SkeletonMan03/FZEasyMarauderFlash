@@ -101,7 +101,7 @@ def choose_fw():
 ||  4) Flash Marauder on ESP32-WROOM			            ||
 ||  5) Flash Marauder on ESP32 Marauder Mini		            ||
 ||  6) Flash v6 Marauder on ESP32-WROOM (RabbitLabs Minion Marauder)||
-||  7) Flash Marauder on ESP32-S3			            ||
+||  7) Flash Marauder on ESP32-S3 (There is no current S3 bin)      ||
 ||  8) Flash Marauder on AWOK v1-3 or Duoboard                      ||
 ||  9) Flash Marauder on AWOK v4 Chungus Board                      ||
 || 10) Flash Marauder on AWOK v5 ESP32                              ||
@@ -123,7 +123,6 @@ def choose_fw():
 	hardresetlist=[5, 6, 8, 9, 10, 11, 12, 13]
 
 	if fwchoice!=None:
-		print("Fwchoice", fwchoice)
 		fwchoicepreselect=True
 		print(Fore.BLUE+"You have preselected option", fwchoice,Style.RESET_ALL)
 		print("If you didn't mean to do this, CTRL-C now!")
@@ -232,6 +231,12 @@ def choose_fw():
 		flashtheboard(eraseparams, flashparams)
 	elif fwchoice==7:
 		print("You have chosen to flash Marauder onto an ESP32-S3")
+		try:
+			os.path.exists(esp32s3fw)  # Since 1.0.0 update didn't include the S3 bin
+		except:
+			print("You don't have the S3 firmware downloaded. It's likely missing from the latest release.")
+			print("If you put a previous multiboard bin in the ESP32Marauder/releases/ folder, it should be able to flash that.")
+			exit()
 		chip="esp32s3"
 		selectedfw="Marauder"
 		selectedboard="ESP32-S3"
@@ -464,13 +469,14 @@ def checkforevilportal():
 def checkfors3bin():
 	esp32s3fwc=('ESP32Marauder/releases/esp32_marauder_v*ultiboardS3.bin')
 	if not glob.glob(esp32s3fwc):
-		print("mutliboards3 bin does not exist!")
+		print("multiboards3 bin does not exist!")
 	global esp32s3fw
 	for esp32s3fw in glob.glob(esp32s3fwc):
 		if os.path.exists(esp32s3fw):
 			print("ESP32-S3 firmware bin exists at", esp32s3fw)
 		else:
 			print("Somehow, the multiboardS3.bin file does not exist!")
+			esp32s3fw=None
 	return
 
 def checkforoldhardwarebin():
