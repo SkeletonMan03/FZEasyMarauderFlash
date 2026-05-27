@@ -29,12 +29,12 @@ You need to install `git` however you would on your system if you haven't alread
 You can find it [here in UberGuidoZ's repo](https://github.com/UberGuidoZ/Flipper/blob/main/Wifi_DevBoard/FZ_Marauder_Flasher)
 
 ## About this script
-* There have been MASSIVE changes to how the settings are done for flashing because it started becoming cluttered and this script became too long, but this won't affect usage.  
 * This script pulls all of its resources from the proper Github repositories in order to make sure you are up-to-date.  
 * The only dependencies it does not get by itself are the required Python modules and Windows tools.  
 * This script should work on most devices that can run Python 3 and can access serial ports via USB.  
 * Support for Evil Portal has been added!
 * As of Marauder Update 0.13.7, there is no more serial bin, it is unified, but the latest Marauder Companion App (7.0) is required to use it on your Flipper
+* AWOK v3 board support has been added!
 
 ## Compatible boards
 * Flipper Zero WiFi Devboard  
@@ -77,9 +77,6 @@ Here are some steps to try:
 * On Windows and Python is acting strange? Uninstall it then re-install it via the Microsoft Store.
 * Make sure you're running the latest Python release! If you're on 3.8 when current is 3.11.3 for example, don't bother opening an issue until after you upgrade and try again. Don't try to use old stuff.
 * Still can't get it and don't understand CLI at all and can't even figure out how to cd? What are you even doing? This definitely isn't for you. Try using the ESP Flasher app on your Flipper Zero.  
-
-## Why do I kind of pick on Windows users?
-Simply, because Windows users seem to come across the most issues (and to be fair, this was a pain to make work properly in Windows), a lot of which are users not understanding how to use the CLI or not reading this whole page, especially the top section.  
 
 ## TODO:
 * Even more code cleanup.  
