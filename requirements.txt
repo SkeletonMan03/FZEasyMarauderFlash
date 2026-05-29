@@ -1,7 +1,5 @@
-gitpython
-glob2
+GitPython
 pyserial
 requests
 esptool
 colorama
-argparse
